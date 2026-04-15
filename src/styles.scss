@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Aquí debajo ya estarán los estilos de Ng-Zorro agregados por el comando ng add
+:root {
+  --color-tertiary-6: #1e3a8a; // Azul oscuro (ajusta según tu paleta)
+  --color-tertiary-4: #3b82f6; // Azul medio
+  --color-tertiary-2: #93c5fd; // Azul claro
+  --color-inverse: #ffffff;
+}
+
+@import "katex/dist/katex.min.css";

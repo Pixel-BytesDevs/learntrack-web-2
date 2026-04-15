@@ -1,0 +1,49 @@
+<main class="layout">
+  <svg
+    class="curvatura"
+    width="100dvw"
+    height="100dvh"
+    viewBox="0 0 20.5 11.5"
+    preserveAspectRatio="none"
+  >
+    <defs>
+      <linearGradient id="degradado" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="var(--color-tertiary-6)" />
+        <stop offset="80%" stop-color="var(--color-tertiary-4)" />
+        <stop offset="100%" stop-color="var(--color-tertiary-2)" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M0,0 L0,11.5 L20.5,11.5 C16,10.3 13.1,7.5 11.35,5 9.2,1.2 5.25,0.5 0,0 Z"
+      fill="url(#degradado)"
+    />
+  </svg>
+
+  <div class="container flex flex-col gap-8">
+    <img
+      class="logo-white cursor-pointer"
+      src="/logos/learntrackwhite.png"
+      style="width: 130px; object-fit: cover"
+      routerLink="/"
+    />
+    <img
+      class="logo-black cursor-pointer"
+      src="/logos/lr-label.png"
+      style="width: 130px; object-fit: cover"
+      routerLink="/"
+    />
+
+    <div class="container-form flex flex-col gap-2 w-full h-full">
+      <p class="font-bold text-title text-[40px] leading-tight">
+        {{ title() }}
+      </p>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <img
+    src="/images/pngs/student.png"
+    class="center-image"
+    alt="Estudiante"
+  />
+</main>

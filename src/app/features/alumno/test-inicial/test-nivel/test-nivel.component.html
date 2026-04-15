@@ -1,0 +1,190 @@
+<div class="max-w-4xl mx-auto py-8 px-4 animate-fade-in">
+  @switch (uiState()) {
+    @case (UiStates.LOADING) {
+      <div class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <nz-spin nzSimple nzSize="large"></nz-spin>
+        <p class="text-slate-500 font-medium animate-pulse">
+          Preparando tu evaluación de nivel...
+        </p>
+      </div>
+    }
+
+    @case (UiStates.TIMEOUT) {
+      <div
+        class="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-4"
+      >
+        <div class="text-7xl">⏰</div>
+        <h2 class="text-3xl font-black text-slate-900">¡Tiempo agotado!</h2>
+        <p class="text-lg text-slate-500">
+          Estamos enviando tus respuestas automáticamente para no perder tu
+          progreso.
+        </p>
+      </div>
+    }
+
+    @case (UiStates.SUBMITTING) {
+      <div class="flex flex-col items-center justify-center min-h-[60vh] gap-6">
+        <div
+          class="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"
+        ></div>
+        <h2 class="text-2xl font-bold text-slate-800">
+          Procesando respuestas...
+        </h2>
+      </div>
+    }
+
+    @case (UiStates.COMPLETED) {
+      <div
+        class="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6"
+      >
+        <div
+          class="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-5xl mx-auto"
+        >
+          <span nz-icon nzType="check"></span>
+        </div>
+        <div>
+          <h2 class="text-3xl font-black text-slate-900">
+            ¡Evaluación Finalizada!
+          </h2>
+          <p class="text-slate-500 text-lg">
+            Tu nivel ha sido registrado. Estamos calculando tu ruta ideal.
+          </p>
+        </div>
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="large"
+          class="rounded-xl px-10 h-14 font-bold"
+          routerLink="/alumno/dashboard"
+        >
+          Ir a Mi Dashboard
+        </button>
+      </div>
+    }
+
+    @case (UiStates.ACTIVE) {
+      <div class="space-y-6">
+        <div
+          class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between gap-4"
+        >
+          <div class="flex-1 space-y-1">
+            <div
+              class="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400"
+            >
+              <span>Progreso</span>
+              <span class="text-blue-600">{{ progress() }}%</span>
+            </div>
+            <nz-progress
+              [nzPercent]="progress()"
+              [nzShowInfo]="false"
+              nzStatus="active"
+              [nzStrokeWidth]="6"
+              class="rounded-full"
+            ></nz-progress>
+          </div>
+
+          <div
+            class="bg-slate-900 text-white px-4 py-2 rounded-xl flex items-center gap-2"
+          >
+            <span nz-icon nzType="clock-circle" class="text-blue-400"></span>
+            <span class="text-lg font-mono font-bold text-blue-50">20:00</span>
+          </div>
+        </div>
+
+        @if (currentQuestion(); as q) {
+          <div
+            class="bg-white rounded-[1.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden"
+          >
+            <div class="p-6 md:p-8 space-y-6">
+              <div class="space-y-2">
+                <span
+                  class="text-[10px] px-3 py-0.5 bg-indigo-50 text-indigo-600 rounded-full font-black uppercase tracking-wider"
+                >
+                  Reto {{ currentIndex() + 1 }} de {{ totalQuestions() }}
+                </span>
+                <div
+                  class="math-container text-lg md:text-xl text-slate-800 font-semibold leading-snug"
+                  [katex]="q.statement"
+                ></div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                @for (alt of q.alternatives; track alt.id) {
+                  <label
+                    class="relative flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 group"
+                    [ngClass]="{
+                      'border-blue-500 bg-blue-50/30 ring-2 ring-blue-500/5':
+                        selectedAnswers()[q.id] === alt.id,
+                      'border-slate-50 bg-slate-50/30 hover:border-slate-200 hover:bg-slate-50':
+                        selectedAnswers()[q.id] !== alt.id,
+                    }"
+                    (click)="selectOption(q.id, alt.id)"
+                  >
+                    <div class="flex items-center gap-3 w-full">
+                      <div
+                        class="w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all"
+                        [ngClass]="{
+                          'bg-blue-600 border-blue-600':
+                            selectedAnswers()[q.id] === alt.id,
+                          'bg-white border-slate-300':
+                            selectedAnswers()[q.id] !== alt.id,
+                        }"
+                      >
+                        @if (selectedAnswers()[q.id] === alt.id) {
+                          <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+                        }
+                      </div>
+
+                      <div
+                        class="text-base font-medium text-slate-700 leading-tight"
+                        [katex]="alt.latexExpression"
+                      ></div>
+                    </div>
+                  </label>
+                }
+              </div>
+            </div>
+
+            <div
+              class="bg-slate-50/50 p-4 md:px-8 flex items-center justify-between border-t border-slate-100"
+            >
+              <button
+                nz-button
+                nzType="default"
+                (click)="prev()"
+                [disabled]="currentIndex() === 0"
+                class="h-10 px-6 rounded-lg font-bold border-slate-200 text-slate-500"
+              >
+                <span nz-icon nzType="arrow-left"></span>
+              </button>
+
+              @if (currentIndex() < totalQuestions() - 1) {
+                <button
+                  nz-button
+                  nzType="primary"
+                  (click)="next()"
+                  [disabled]="!selectedAnswers()[q.id]"
+                  class="h-10 px-8 rounded-lg font-bold bg-slate-800 border-none inline-flex items-center"
+                >
+                  Siguiente
+                  <span nz-icon nzType="arrow-right" class="ml-2"></span>
+                </button>
+              } @else {
+                <button
+                  nz-button
+                  nzType="primary"
+                  (click)="submit()"
+                  [disabled]="progress() < 100"
+                  class="h-10 px-8 rounded-lg font-bold bg-blue-600 border-none shadow-md inline-flex items-center"
+                >
+                  Finalizar
+                  <span nz-icon nzType="send" class="ml-2"></span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

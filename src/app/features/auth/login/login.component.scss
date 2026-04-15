@@ -1,0 +1,57 @@
+:host ::ng-deep {
+  .nz-form-item {
+    margin-bottom: 0;
+  }
+  
+  .modern-input-group {
+    @apply h-12 rounded-xl overflow-hidden border-none shadow-sm transition-all flex items-center;
+    background: var(--color-inverse);
+    
+    .ant-input {
+      @apply bg-transparent border-none text-base font-medium;
+      height: 100% !important;
+      
+      &::placeholder {
+        @apply opacity-40;
+      }
+    }
+
+    &:hover, &.ant-input-affix-wrapper-focused {
+      @apply shadow-md ring-2 ring-blue-500/20;
+    }
+  }
+
+  .ant-input-prefix {
+    @apply mr-3 text-lg flex items-center;
+  }
+
+  // Estilo específico para el Checkbox para que no pierda color
+  .ant-checkbox-wrapper {
+    @apply flex items-center;
+    span { @apply text-xs md:text-sm; }
+  }
+}
+
+.social-btn {
+  @apply flex-1 flex items-center justify-center gap-2 h-12 rounded-xl border-none shadow-sm bg-white hover:bg-slate-50 hover:scale-[1.02] active:scale-[0.98] transition-all;
+}
+
+@media (min-width: 940px) {
+  .text-color-inverse { color: var(--color-inverse); }
+  .text-color-secondary-1 { color: var(--color-secondary-1); }
+  .text-color-secondary-2 { color: var(--color-secondary-2); }
+}
+
+@media (max-width: 940px) {
+  .text-color-black { color: var(--color-subordinary-9); }
+  .text-color-inverse { color: var(--color-subordinary-9); }
+}
+
+.animate-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,17 @@
+export const environment = {
+    production: false,
+    auth_url: "http://26.138.194.69:9003",
+    client_secret: 'secret',
+    //authorize_uri: "http://localhost:9003/oauth2/authorize?",
+    client_id: "client",
+    redirect_uri: "http://localhost:4200/authorized",
+    scope: "openid profile",
+    //response_type: "code",
+    //response_mode: "form_post",
+    //code_challenge_method: "S256",
+    //code_challenge: "GF8OZZDPYlZtDcYedKZnUoh3c5Xa1yMpFJ5-MFZEDKc",
+    //code_verifier: "OqLdAI5pQzI0S7cc2hUE2oHfbdo8xtL6GEwNQBXImAQ",
+    token_url: "http://26.138.194.69:9003/oauth2/token",
+    //grant_type: 'authorization_code',
+    //resource_url: "http://localhost:8080/resource/",
+}

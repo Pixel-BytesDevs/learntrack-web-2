@@ -1,0 +1,185 @@
+<div
+  class="max-w-5xl mx-auto py-10 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700"
+>
+  @if (resultado()) {
+    <div class="space-y-8">
+      <div class="text-center space-y-4">
+        <div
+          class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl mx-auto shadow-sm"
+        >
+          <span nz-icon nzType="check-circle" nzTheme="fill"></span>
+        </div>
+        <div class="space-y-1">
+          <h1 class="text-4xl font-black text-slate-900 tracking-tight">
+            ¡Diagnóstico Completado!
+          </h1>
+          <p class="text-lg text-slate-500 font-medium">
+            Hemos analizado tu forma de aprender y tus conocimientos previos.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+          <nz-card
+            class="rounded-[2.5rem] border-none shadow-2xl shadow-slate-200/50 overflow-hidden"
+          >
+            <div class="p-8 space-y-8">
+              <div class="flex items-start justify-between">
+                <div class="space-y-1">
+                  <h3
+                    class="text-xs font-black uppercase tracking-[0.2em] text-blue-600"
+                  >
+                    Perfil de Aprendizaje
+                  </h3>
+                  <h2 class="text-3xl font-bold text-slate-800">
+                    {{ estiloPredominante()?.tipo | titlecase }}
+                  </h2>
+                </div>
+                <nz-tag
+                  [nzColor]="getStyleColor(estiloPredominante()?.tipo ?? '')"
+                  class="rounded-full px-4 py-1 font-bold border-none capitalize"
+                >
+                  Predominante
+                </nz-tag>
+              </div>
+
+              <div
+                class="bg-slate-50 p-6 rounded-3xl border border-slate-100 italic text-slate-600 leading-relaxed text-lg"
+              >
+                "{{ descripcionEstilo() }}"
+              </div>
+
+              <div class="space-y-6">
+                <h4
+                  class="font-bold text-slate-400 text-sm uppercase tracking-widest"
+                >
+                  Distribución de Estilos
+                </h4>
+                <div class="grid gap-5">
+                  @for (estilo of resultado()?.estilos; track estilo.tipo) {
+                    <div class="space-y-2">
+                      <div class="flex justify-between items-end">
+                        <span class="font-bold text-slate-700 capitalize">{{
+                          estilo.tipo.toLowerCase()
+                        }}</span>
+                        <span class="text-slate-400 font-mono font-bold"
+                          >{{ estilo.porcentaje }}%</span
+                        >
+                      </div>
+                      <nz-progress
+                        [nzPercent]="estilo.porcentaje"
+                        [nzShowInfo]="false"
+                        [nzStrokeColor]="getStyleColor(estilo.tipo)"
+                        [nzStrokeWidth]="12"
+                        class="rounded-full overflow-hidden"
+                      >
+                      </nz-progress>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+        <div class="space-y-6">
+          <nz-card
+            class="rounded-[2rem] border-none shadow-xl shadow-slate-200/50"
+          >
+            <div class="p-6 space-y-6">
+              <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                <span nz-icon nzType="line-chart" class="text-blue-500"></span>
+                Tu Nivel en Álgebra
+              </h3>
+              <div class="space-y-4">
+                @for (item of competenciasProgreso(); track item.nombre) {
+                  <div class="space-y-1">
+                    <div class="flex justify-between text-xs font-bold">
+                      <span class="text-slate-500">{{ item.nombre }}</span>
+                      <span class="text-blue-600">{{ item.porcentaje }}%</span>
+                    </div>
+                    <nz-progress
+                      [nzPercent]="item.porcentaje"
+                      [nzShowInfo]="false"
+                      [nzStrokeWidth]="6"
+                      class="rounded-full"
+                    ></nz-progress>
+                  </div>
+                }
+              </div>
+            </div>
+          </nz-card>
+
+          <nz-card
+            class="rounded-[2rem] bg-slate-900 border-none shadow-xl text-white"
+          >
+            <div class="p-6 space-y-4">
+              <h3 class="font-bold flex items-center gap-2 text-blue-400">
+                <span nz-icon nzType="rocket"></span>
+                Ruta de Inicio
+              </h3>
+              <div class="space-y-2">
+                <p
+                  class="text-xs uppercase tracking-widest text-slate-500 font-black"
+                >
+                  Primer Tema:
+                </p>
+                <p class="text-xl font-bold">
+                  {{ competenciaInicial().competencia }}
+                </p>
+                <nz-tag
+                  nzColor="blue"
+                  class="border-none font-bold rounded-md"
+                  >{{ competenciaInicial().dificultad }}</nz-tag
+                >
+              </div>
+              <p class="text-slate-400 text-sm leading-snug">
+                {{ competenciaInicial().descripcion }}
+              </p>
+            </div>
+          </nz-card>
+        </div>
+      </div>
+
+      <div class="flex flex-col items-center gap-4 py-8">
+        <button
+          nz-button
+          nzType="primary"
+          (click)="finishProcess()"
+          [nzLoading]="loading()"
+          class="h-16 px-16 text-xl font-black rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 border-none shadow-2xl shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all"
+        >
+          Comenzar mi Aprendizaje
+          <span nz-icon nzType="arrow-right" class="ml-2"></span>
+        </button>
+        <p class="text-slate-400 text-sm font-medium">
+          Al hacer clic, se configurará tu aula personalizada.
+        </p>
+      </div>
+    </div>
+  } @else {
+    <div
+      class="min-h-[60vh] flex flex-col items-center justify-center text-center gap-6"
+    >
+      <div class="text-6xl opacity-20">📊</div>
+      <div class="space-y-2">
+        <h2 class="text-2xl font-bold text-slate-800">
+          No hay resultados disponibles
+        </h2>
+        <p class="text-slate-500 max-w-xs mx-auto">
+          Para ver tu perfil de aprendizaje, primero debes completar los tests
+          anteriores.
+        </p>
+      </div>
+      <button
+        nz-button
+        nzType="default"
+        routerLink="/alumno/test-inicial"
+        class="rounded-xl font-bold h-12 px-8"
+      >
+        Ir al Test
+      </button>
+    </div>
+  }
+</div>

@@ -1,0 +1,65 @@
+// src/app/features/auth/register/register.component.scss
+
+:host ::ng-deep {
+  .nz-form-item {
+    margin-bottom: 0;
+  }
+  
+  // Estilo para los inputs que flotan sobre el layout
+  .modern-input-group {
+    // CAMBIO: Usamos h-12 (48px) que sí existe por defecto
+    @apply h-12 rounded-xl overflow-hidden border-none shadow-sm transition-all flex items-center;
+    background: var(--color-inverse);
+    
+    .ant-input {
+      @apply bg-transparent border-none text-base font-medium;
+      height: 100% !important; // Asegura que el input ocupe todo el alto del grupo
+      
+      &::placeholder {
+        @apply opacity-40;
+      }
+    }
+
+    &:hover, &.ant-input-affix-wrapper-focused {
+      @apply shadow-md ring-2 ring-blue-500/20;
+    }
+  }
+
+  // Ajuste para iconos en el prefijo
+  .ant-input-prefix {
+    @apply mr-3 text-lg flex items-center;
+  }
+}
+
+.social-btn {
+  // Aquí también usamos h-12 para que todo esté alineado
+  @apply flex-1 flex items-center justify-center gap-2 h-12 rounded-xl border-none shadow-sm bg-white hover:bg-slate-50 hover:scale-[1.02] active:scale-[0.98] transition-all;
+}
+
+// Media queries originales mantenidas
+@media (min-width: 940px) {
+  .text-color-inverse {
+    color: var(--color-inverse);
+  }
+  .text-color-secondary-2 {
+    color: var(--color-secondary-2);
+  }
+}
+
+@media (max-width: 940px) {
+  .text-color-black {
+    color: var(--color-subordinary-9);
+  }
+  .text-color-inverse {
+    color: var(--color-subordinary-9);
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,125 @@
+<div class="flex flex-col gap-6 animate-in fade-in duration-700">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-5">
+    <p class="text-color-inverse text-lg font-medium opacity-90 tracking-tight">
+      Bienvenido de nuevo. Por favor inicie sesión en su cuenta
+    </p>
+
+    <div class="flex gap-4">
+      <button nz-button nzType="default" type="button" class="social-btn">
+        <span
+          nz-icon
+          nzType="facebook"
+          nzTheme="fill"
+          class="text-blue-600"
+        ></span>
+        <span class="text-color-black font-semibold">Facebook</span>
+      </button>
+      <button
+        nz-button
+        nzType="default"
+        type="button"
+        (click)="loginWithGoogle()"
+        class="social-btn"
+      >
+        <span nz-icon nzType="google" class="text-red-500"></span>
+        <span class="text-color-black font-semibold">Google</span>
+      </button>
+    </div>
+
+    <div class="flex items-center gap-3 my-1 opacity-40">
+      <div class="flex-1 h-[1px] bg-white"></div>
+      <span
+        class="text-[10px] text-white font-bold uppercase tracking-widest px-2"
+        >O accede con</span
+      >
+      <div class="flex-1 h-[1px] bg-white"></div>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Por favor, ingresa tu correo">
+          <nz-input-group [nzPrefix]="prefixEmail" class="modern-input-group">
+            <input
+              type="email"
+              nz-input
+              formControlName="email"
+              placeholder="Correo"
+            />
+          </nz-input-group>
+          <ng-template #prefixEmail
+            ><span nz-icon nzType="mail" class="opacity-50"></span
+          ></ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control nzErrorTip="La contraseña es requerida">
+          <nz-input-group
+            [nzPrefix]="prefixLock"
+            [nzSuffix]="suffixLock"
+            class="modern-input-group"
+          >
+            <input
+              [type]="passwordVisible ? 'text' : 'password'"
+              nz-input
+              formControlName="password"
+              placeholder="Contraseña"
+            />
+          </nz-input-group>
+          <ng-template #prefixLock
+            ><span nz-icon nzType="lock" class="opacity-50"></span
+          ></ng-template>
+          <ng-template #suffixLock>
+            <span
+              nz-icon
+              [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+              (click)="passwordVisible = !passwordVisible"
+              class="cursor-pointer opacity-40 hover:opacity-100 transition-opacity"
+            >
+            </span>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="flex justify-between items-center px-1">
+      <label
+        nz-checkbox
+        formControlName="remember"
+        class="text-color-secondary-1 font-medium"
+      >
+        Recordarme
+      </label>
+      <button
+        type="button"
+        nz-button
+        nzType="link"
+        class="text-color-secondary-2 p-0 font-bold hover:underline"
+      >
+        ¿Olvidó su contraseña?
+      </button>
+    </div>
+
+    <button
+      nz-button
+      nzType="primary"
+      type="submit"
+      [nzLoading]="loading"
+      class="h-14 w-full text-lg font-bold rounded-2xl mt-2 border-none bg-gradient-to-r from-blue-600 to-indigo-600 shadow-xl shadow-blue-900/20 hover:scale-[1.01] active:scale-[0.98] transition-all"
+    >
+      Iniciar sesión
+    </button>
+  </form>
+
+  <div class="flex justify-center items-center gap-2">
+    <p class="text-color-inverse m-0 opacity-70">¿No tienes cuenta?</p>
+    <button
+      nz-button
+      nzType="link"
+      routerLink="/register"
+      class="text-color-secondary-2 p-0 font-bold hover:underline"
+    >
+      Regístrate
+    </button>
+  </div>
+</div>

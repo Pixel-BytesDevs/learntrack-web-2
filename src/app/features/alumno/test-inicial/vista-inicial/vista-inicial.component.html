@@ -1,0 +1,80 @@
+<main class="min-h-[85vh] flex flex-col items-center justify-center px-6 py-12 animate-fade-in">
+  
+  <div class="max-w-4xl w-full text-center space-y-6 mb-16">
+    <div class="relative inline-block">
+      <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full blur opacity-25"></div>
+      <img
+        src="/images/diagnostico.png"
+        alt="Ilustración Diagnóstico"
+        class="relative w-48 h-48 md:w-64 md:h-64 object-contain mx-auto drop-shadow-xl"
+      />
+    </div>
+
+    <div class="space-y-4">
+      <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+        Comencemos tu <span class="text-blue-600">Ruta de Aprendizaje</span>
+      </h1>
+      <p class="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
+        Antes de empezar, necesitamos conocerte. Este diagnóstico ajustará el contenido a tu nivel actual y a tu forma preferida de aprender.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+    
+    <div class="info-card group">
+      <div class="icon-container bg-blue-50 group-hover:bg-blue-600">
+        <span nz-icon nzType="line-chart" class="text-blue-600 group-hover:text-white"></span>
+      </div>
+      <div class="space-y-2">
+        <h3 class="text-lg font-bold text-slate-800">Evaluación de Nivel</h3>
+        <p class="text-slate-500 text-sm leading-snug">
+          Identificaremos tus conocimientos previos en álgebra para no aburrirte con lo que ya sabes.
+        </p>
+      </div>
+    </div>
+
+    <div class="info-card group">
+      <div class="icon-container bg-indigo-50 group-hover:bg-indigo-600">
+        <span nz-icon nzType="bulb" class="text-indigo-600 group-hover:text-white"></span>
+      </div>
+      <div class="space-y-2">
+        <h3 class="text-lg font-bold text-slate-800">Estilo de Aprendizaje</h3>
+        <p class="text-slate-500 text-sm leading-snug">
+          ¿Visual, auditivo o práctico? Descubriremos cómo procesas mejor la información.
+        </p>
+      </div>
+    </div>
+
+    <div class="info-card group">
+      <div class="icon-container bg-violet-50 group-hover:bg-violet-600">
+        <span nz-icon nzType="deployment-unit" class="text-violet-600 group-hover:text-white"></span>
+      </div>
+      <div class="space-y-2">
+        <h3 class="text-lg font-bold text-slate-800">Plan a tu Medida</h3>
+        <p class="text-slate-500 text-sm leading-snug">
+          Generaremos una ruta progresiva que se adapta a tu ritmo, paso a paso.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mt-16 flex flex-col items-center gap-4">
+    <button
+      nz-button
+      nzType="primary"
+      nzSize="large"
+      (click)="startDiagnostico()"
+      class="h-16 px-12 text-xl font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 border-none shadow-xl shadow-blue-200 hover:scale-105 active:scale-95 transition-all"
+    >
+      Comenzar Diagnóstico
+      <span nz-icon nzType="arrow-right" class="ml-2"></span>
+    </button>
+    <p class="text-slate-400 text-sm font-medium italic">
+      <span nz-icon nzType="clock-circle" class="mr-1"></span>
+      Tiempo estimado: 10 - 15 minutos
+    </p>
+  </div>
+
+</main>
