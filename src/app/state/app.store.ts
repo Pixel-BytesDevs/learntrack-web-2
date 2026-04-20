@@ -11,6 +11,7 @@ import { TokenService } from '../core/services/token.service';
 //auth
 
 interface User {
+  id: number;
   name: string;
   role: string;
   avatar?: string;
@@ -40,6 +41,7 @@ export const AppStore = signalStore(
         patchState(store, {
           isAuthenticated: true,
           user: {
+            id: tokenService.getUserId(),
             name: tokenService.getDisplayName(),
             role: tokenService.getRoles()[0] || 'USER'
           }
@@ -52,6 +54,7 @@ export const AppStore = signalStore(
       patchState(store, {
         isAuthenticated: true,
         user: {
+          id: tokenService.getUserId(),
           name: tokenService.getDisplayName(),
           role: tokenService.getRoles()[0] || 'USER'
         }

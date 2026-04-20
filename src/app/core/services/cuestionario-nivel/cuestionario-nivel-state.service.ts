@@ -4,9 +4,13 @@ import { Router } from "@angular/router";
 import { PlacementResponse, PlacementTestSnapshot } from "../../models/cuestionario-nivel.models";
 import { BehaviorSubject, catchError, delay, finalize, of, tap } from "rxjs";
 import { UiState } from "../../enums/tipos-ui-state.enum";
+import { ResultLevelTestResponse } from "../../interfaces/response/cuestionario-nivel/result-level-test-response";
 
 @Injectable({ providedIn: 'root' })
 export class CuestionarioNivelStateService {
+
+	private _results$ = new BehaviorSubject<ResultLevelTestResponse | undefined>(undefined);
+readonly results$ = this._results$.asObservable();
 	private apiService = inject(CuestionarioNivelService);
 	private router = inject(Router);
 
@@ -129,44 +133,39 @@ export class CuestionarioNivelStateService {
 	/** Envía el cuestionario validado */
 	/** Envía el cuestionario validado al backend */
 submitTest(test: PlacementResponse) {
-    const validated = this.validateBeforeSubmit(test);
+  const validated = this.validateBeforeSubmit(test);
 
-    // 1. Iniciamos estados de carga
-    this._loading$.next(true);
-    this._submitted$.next(false);
-    this._uiState.next(UiState.SUBMITTING);
-    this.saveState(); // Guardamos que estamos enviando
+  this._loading$.next(true);
+  this._submitted$.next(false);
+  this._uiState.next(UiState.SUBMITTING);
 
-    this.apiService
-        .submitPlacementTest(validated)
-        .pipe(
-            // tap() para efectos secundarios exitosos
-            tap(() => {
-                console.log('✅ Cuestionario enviado con éxito');
-                this._submitted$.next(true);
-                this._uiState.next(UiState.COMPLETED);
-                this.clearState(); // 🗑️ Limpiamos el localStorage porque ya terminó
-            }),
-            // Manejo de errores
-            catchError((err) => {
-                console.error('❌ Error al enviar cuestionario', err);
-                // Opcional: podrías poner un estado de error aquí
-                // this._uiState.next(UiState.ACTIVE); 
-                return of(null);
-            }),
-            // delay opcional para que el usuario vea el check de "Completado" antes de saltar
-            delay(1500), 
-            // Finalize se ejecuta siempre (error o éxito)
-            finalize(() => this._loading$.next(false))
-        )
-        .subscribe({
-            next: () => {
-                // 2. Redirigimos a la ruta correcta según tu app.routes.ts
-                this.router.navigate(['/alumno/test-inicial/results']);
-            }
-        });
+  this.apiService.submitPlacementTest(validated)
+    .pipe(
+      tap((response) => {
+        console.log('RESULTADOS:', response);
+
+        this._results$.next(response);
+
+        localStorage.setItem(
+          'placement-results',
+          JSON.stringify(response)
+        );
+
+        this._submitted$.next(true);
+        this._uiState.next(UiState.COMPLETED);
+        this.clearState();
+      }),
+      finalize(() => this._loading$.next(false))
+    )
+    .subscribe({
+      next: () => {
+        this.router.navigate(['/alumno/test-inicial/results']);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
 }
-
 	markTimeUp() {
 		this._timeUp$.next(true);
 		this._uiState.next(UiState.TIMEOUT);

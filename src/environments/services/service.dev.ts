@@ -5,7 +5,7 @@ export const Services = Object.freeze({
     moduloAlumno: {
         cuestionarioUrl: 'http://26.138.194.69:8092/preguntas',
         insertCuestionarioIrl: 'http://26.138.194.69:8092/cuestionarios/respuestas?reemplazar=true',
-        cuestionarioNivel: 'http://26.138.194.69:8092/api/placement/1',
+        cuestionarioNivel: 'http://26.138.194.69:8092/api/placement',
         grafoEstudiante: 'http://26.138.194.69:8092/api/usuario-topic',
         evaluacion: 'http://26.138.194.69:8092/api/recommendation-evaluation'
     },

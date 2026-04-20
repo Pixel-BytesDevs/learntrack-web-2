@@ -17,8 +17,10 @@ export class UsuariosCuestionarioService{
   submitCuestionario(payload: CuestionarioPayload) {
     return this.http.post<CuestionarioResponse>(`${this.apiUrl}`, payload).pipe(
       tap((response) => {
-        // Guardamos la respuesta en memoria al recibirla del backend
+        // Guardamos la respuesta en memoria al recibirla del backendc
+        console.log("Agregando resultados a resultadosCuestionario")
         this._resultadoCuestionario = response;
+        
       }),
       catchError((error) => {
         console.error('Error al enviar el cuestionario:', error);

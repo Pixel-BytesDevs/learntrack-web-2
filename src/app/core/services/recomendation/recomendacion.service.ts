@@ -1,5 +1,6 @@
+import { TokenService } from './../token.service';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   catchError,
   filter,
@@ -19,6 +20,7 @@ import { Recommendation } from '../../models/recomendation.models';
 })
 export class RecomendacionService {
   private apiUrl = 'http://26.138.194.69:5000/api/v1/recommendations';
+  tokenService = inject(TokenService)
 
   private stopPolling$ = new Subject<void>();
 
@@ -47,7 +49,7 @@ export class RecomendacionService {
   ): Observable<Recommendation | null> {
     return timer(0, intervalMs).pipe(
       takeUntil(stop$),
-      switchMap(() => this.getRecommendation(userId)),
+      switchMap(() => this.getRecommendation(this.tokenService.getUserId())),
       filter((response) => {
         if (!response || response.status === 'PENDING') {
           return false;

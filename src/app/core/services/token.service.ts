@@ -52,6 +52,10 @@ export class TokenService {
 		return this.decodeToken()?.isGoogleUser ?? false;
 	}
 
+	getUserId(): number {
+		return this.decodeToken()?.id ?? 0;
+	}
+
 	getDisplayName(): string {
 		return this.decodeToken()?.name ?? this.getUsername();
 	}

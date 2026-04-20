@@ -18,7 +18,7 @@ export class GrafoEstudianteService {
 
 	getGrafoEstudiante(userId: number): Observable<TemaNodo[] | null> {
         this._loading$.next(true);
-		return this.http.get<TemaNodo[]>(`${this.apiUrl}/progress-graph/${userId}`).pipe(
+		return this.http.get<TemaNodo[]>(`${this.apiUrl}/progress-graph`).pipe(
 			tap((res) => this._graph$.next(res)),
 			catchError((error) => {
 				console.error('Error al obtener el grafo del estudiante:', error);
@@ -26,6 +26,15 @@ export class GrafoEstudianteService {
                 return of(null);
 			}),
             finalize(() => this._loading$.next(false)),
+		);
+	}
+
+	initializationOfStudentGraph(): Observable<string | null> {
+		return this.http.post<string>(`${this.apiUrl}/initialize`,null).pipe(
+			catchError((error) => {
+				console.error('Error al inicializar el grafo del estudiante: ', error);
+                return of("ERROR RETURN");
+			}),
 		);
 	}
 }

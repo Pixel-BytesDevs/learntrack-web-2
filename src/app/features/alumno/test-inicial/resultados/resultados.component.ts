@@ -15,6 +15,8 @@ import { TokenService } from '../../../../core/services/token.service';
 import { CuestionarioResponse } from '../../../../core/models/cuestionario.models';
 import { CompetenciaInicialDTO, CompetenciaProgresoDTO } from '../../../../core/models/resultados-test.models';
 import { TipoEstiloVark } from '../../../../core/enums/tipo-estilo-vark.enum';
+import { ResultLevelTestResponse } from '../../../../core/interfaces/response/cuestionario-nivel/result-level-test-response';
+import { CuestionarioNivelStateService } from '../../../../core/services/cuestionario-nivel/cuestionario-nivel-state.service';
 
 // Core
 
@@ -29,10 +31,13 @@ import { TipoEstiloVark } from '../../../../core/enums/tipo-estilo-vark.enum';
 })
 export class ResultadosComponent implements OnInit {
   private cuestionarioService = inject(UsuariosCuestionarioService);
+  private state = inject(CuestionarioNivelStateService);
   private authService = inject(AuthService);
   private tokenService = inject(TokenService);
   private router = inject(Router);
   private message = inject(NzMessageService);
+  //results = signal<ResultLevelTestResponse[]>([]);
+  results = signal<ResultLevelTestResponse | undefined>(undefined);
 
   // Signals para el estado
   resultado = signal<CuestionarioResponse | undefined>(undefined);
@@ -71,7 +76,10 @@ export class ResultadosComponent implements OnInit {
   });
 
   ngOnInit() {
+    
     this.resultado.set(this.cuestionarioService.resultadoCuestionario);
+    this.state.results$
+    .subscribe(res => this.results.set(res));
   }
 
   getStyleColor(tipo: string): string {

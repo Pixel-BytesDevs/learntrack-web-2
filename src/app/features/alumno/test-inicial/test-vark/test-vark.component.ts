@@ -1,4 +1,11 @@
-import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  signal,
+  computed,
+  effect,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -12,26 +19,39 @@ import { CuestionarioService } from '../../../../core/services/cuestionario/cues
 import { UsuariosCuestionarioService } from '../../../../core/services/test-inicial/usuarios-cuestionario-service.service';
 import { SessionStorage } from '../../../../core/storages/session/session.storage';
 import { TokenService } from '../../../../core/services/token.service';
-import { CuestionarioPayload, PreguntaResponse } from '../../../../core/models/cuestionario.models';
+import {
+  CuestionarioPayload,
+  PreguntaResponse,
+} from '../../../../core/models/cuestionario.models';
+import { AppStore } from '../../../../state/app.store';
+import { GrafoEstudianteService } from '../../../../core/services/grafo/grafo-estudiante.service';
 
 // Servicios y Modelos
-
 
 @Component({
   selector: 'app-test-vark',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, NzButtonModule, NzIconModule, NzCheckboxModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    NzButtonModule,
+    NzIconModule,
+    NzCheckboxModule,
+  ],
   templateUrl: './test-vark.component.html',
-  styleUrl: './test-vark.component.scss'
+  styleUrl: './test-vark.component.scss',
 })
 export class TestVarkComponent implements OnInit {
   // Inyecciones
   private cuestionarioService = inject(CuestionarioService);
+  private graphService = inject(GrafoEstudianteService);
   private userCuestionarioService = inject(UsuariosCuestionarioService);
   private storage = inject(SessionStorage);
   private tokenService = inject(TokenService);
   private router = inject(Router);
   private message = inject(NzMessageService);
+  readonly store = inject(AppStore);
 
   // Estado con Signals
   questions = signal<PreguntaResponse[]>([]);
@@ -42,9 +62,11 @@ export class TestVarkComponent implements OnInit {
   // Computados
   currentQuestion = computed(() => this.questions()[this.currentIndex()]);
   totalQuestions = computed(() => this.questions().length);
-  
+
   answeredCount = computed(() => {
-    return this.questions().filter(q => (this.selectedAnswers()[q.preguntaId]?.length ?? 0) > 0).length;
+    return this.questions().filter(
+      (q) => (this.selectedAnswers()[q.preguntaId]?.length ?? 0) > 0,
+    ).length;
   });
 
   progress = computed(() => {
@@ -52,7 +74,9 @@ export class TestVarkComponent implements OnInit {
     return Math.floor((this.answeredCount() / this.totalQuestions()) * 100);
   });
 
-  isLastQuestion = computed(() => this.currentIndex() === this.totalQuestions() - 1);
+  isLastQuestion = computed(
+    () => this.currentIndex() === this.totalQuestions() - 1,
+  );
 
   constructor() {
     // Efecto para persistir automáticamente en sessionStorage cuando cambien las respuestas
@@ -67,7 +91,7 @@ export class TestVarkComponent implements OnInit {
   }
 
   private loadQuestions() {
-    this.cuestionarioService.getQuestions().subscribe(data => {
+    this.cuestionarioService.getQuestions().subscribe((data) => {
       this.questions.set(data);
     });
   }
@@ -82,7 +106,7 @@ export class TestVarkComponent implements OnInit {
     let alts = current[preguntaId] ? [...current[preguntaId]] : [];
 
     if (alts.includes(alternativaId)) {
-      alts = alts.filter(id => id !== alternativaId);
+      alts = alts.filter((id) => id !== alternativaId);
     } else {
       alts.push(alternativaId);
     }
@@ -93,30 +117,43 @@ export class TestVarkComponent implements OnInit {
 
   next() {
     if (this.currentIndex() < this.totalQuestions() - 1) {
-      this.currentIndex.update(i => i + 1);
+      this.currentIndex.update((i) => i + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
   prev() {
     if (this.currentIndex() > 0) {
-      this.currentIndex.update(i => i - 1);
+      this.currentIndex.update((i) => i - 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  }
+
+  initializationOfStudentGraph() {
+    this.graphService.initializationOfStudentGraph().subscribe({
+      next: () => {
+        console.log('Grafo inicializado');
+      },
+      error: () => {
+        this.message.error('Error al inicializar');
+      },
+    });
   }
 
   submit() {
     this.loading.set(true);
     const payload: CuestionarioPayload = {
-      usuarioId: Number(this.tokenService.getUsername()) || 1,
-      respuestas: this.questions().map(q => ({
+      usuarioId: Number(this.store.user()?.id) || 1,
+      respuestas: this.questions().map((q) => ({
         preguntaId: q.preguntaId,
-        alternativaIds: this.selectedAnswers()[q.preguntaId] ?? []
-      }))
+        alternativaIds: this.selectedAnswers()[q.preguntaId] ?? [],
+      })),
     };
 
     this.userCuestionarioService.submitCuestionario(payload).subscribe({
       next: () => {
+        //inicializar grafo
+        this.initializationOfStudentGraph();
         this.storage.remove('vark_progress');
         this.message.success('Cuestionario VARK completado con éxito');
         this.router.navigate(['/alumno/test-inicial/nivel']);
@@ -124,7 +161,7 @@ export class TestVarkComponent implements OnInit {
       error: () => {
         this.message.error('Error al enviar las respuestas');
         this.loading.set(false);
-      }
+      },
     });
   }
 }
