@@ -22,6 +22,6 @@ export class EvaluacionService {
   }
 
   submitPlacementTest(id: number, placementTest: EvaluationResponse): Observable<number> {
-    return this.http.put<number>(`${this.apiUrl}/${id}/submit`, placementTest);
+    return this.http.put<number>(`${this.apiUrl}/submit`, placementTest);
   }
 }

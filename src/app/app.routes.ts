@@ -1,3 +1,4 @@
+import { EvaluacionComponent } from './features/alumno/recomendaciones/evaluacion/evaluacion.component';
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
 import {
@@ -152,6 +153,13 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/alumno/recomendaciones/visor-oa/visor-oa.component').then(
                 (m) => m.VisorOaComponent
+              )
+
+          },{
+             path: 'evaluacion',
+            loadComponent: () =>
+              import('./features/alumno/recomendaciones/evaluacion/evaluacion.component').then(
+                (m) => m.EvaluacionComponent
               )
 
           }

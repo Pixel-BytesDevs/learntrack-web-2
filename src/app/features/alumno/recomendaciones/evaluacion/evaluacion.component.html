@@ -182,7 +182,7 @@
                   nz-button
                   nzType="primary"
                   (click)="nextQuestion()"
-                  [disabled]="!currentQuestion()?.alternatives?.some(a => a.selected)"
+                  [disabled]="!canGoNext()"
                   class="h-12 px-10 rounded-xl font-bold bg-slate-900 border-none flex items-center gap-2"
                 >
                   Siguiente <span nz-icon nzType="arrow-right"></span>
@@ -231,7 +231,7 @@
 
         <div class="bg-slate-50 rounded-[2rem] p-8 space-y-4">
           <div class="text-6xl font-black text-emerald-600 leading-none">
-            {{ domainLevelResult() | number: "1.0-0" }}%
+            {{ domainLevelResult() | number: "1.0-5" }}%
           </div>
           <p
             class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400"
