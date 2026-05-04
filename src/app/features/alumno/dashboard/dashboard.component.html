@@ -1,1 +1,170 @@
-<div>Bienvenido</div>
+<div class="space-y-6 md:space-y-8">
+  <section
+    class="dashboard-hero rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 text-white overflow-hidden"
+  >
+    <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-2xl space-y-3">
+        <nz-tag
+          class="rounded-full border-none bg-white/20 text-white font-black uppercase tracking-widest text-[10px] px-3 py-1"
+        >
+          Panel del Alumno
+        </nz-tag>
+        <h1 class="text-3xl md:text-5xl font-black leading-tight tracking-tight">
+          Hola, {{ studentName() }}.
+        </h1>
+        <p class="text-base md:text-lg text-blue-100 font-medium">
+          Este espacio resume tu avance, tus resultados y la ruta sugerida para
+          seguir mejorando.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 md:gap-4 w-full lg:w-auto">
+        <div class="stat-chip">
+          <span nz-icon nzType="line-chart" class="text-xl"></span>
+          <div>
+            <p class="stat-chip-label">Promedio</p>
+            <p class="stat-chip-value">{{ averageScore() }}%</p>
+          </div>
+        </div>
+        <div class="stat-chip">
+          <span nz-icon nzType="book" class="text-xl"></span>
+          <div>
+            <p class="stat-chip-label">Temas medidos</p>
+            <p class="stat-chip-value">{{ levelResults()?.scores?.length ?? 0 }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  @if (hasData()) {
+    <section class="grid grid-cols-1 xl:grid-cols-3 gap-5 md:gap-6">
+      <nz-card class="xl:col-span-2 rounded-3xl border-none shadow-lg shadow-slate-200/60">
+        <div class="space-y-5">
+          <div class="flex items-center justify-between gap-4">
+            <h2 class="text-lg md:text-xl font-bold text-slate-800">
+              Resultados del diagnóstico de nivel
+            </h2>
+            <a
+              routerLink="/alumno/test-inicial/results"
+              class="text-blue-600 font-semibold text-sm hover:text-blue-700 transition-colors"
+            >
+              Ver detalle
+            </a>
+          </div>
+
+          @if ((levelResults()?.scores?.length ?? 0) > 0) {
+            <div class="space-y-4">
+              @for (topic of levelResults()?.scores; track topic.nameTopic) {
+                <div class="space-y-2">
+                  <div class="flex items-end justify-between">
+                    <p class="font-semibold text-slate-700">{{ topic.nameTopic }}</p>
+                    <p class="text-sm font-bold text-slate-500">{{ topic.score }}%</p>
+                  </div>
+                  <nz-progress
+                    [nzPercent]="topic.score"
+                    [nzShowInfo]="false"
+                    [nzStrokeWidth]="10"
+                    [nzStrokeColor]="topic.score >= 70 ? '#2563eb' : topic.score >= 40 ? '#f59e0b' : '#ef4444'"
+                    class="rounded-full overflow-hidden"
+                  ></nz-progress>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="empty-state">
+              <span nz-icon nzType="bar-chart" class="text-2xl text-slate-400"></span>
+              <p>Aun no hay resultados de nivel disponibles.</p>
+            </div>
+          }
+        </div>
+      </nz-card>
+
+      <div class="space-y-5">
+        <nz-card class="rounded-3xl border-none shadow-lg shadow-slate-200/60">
+          <div class="space-y-4">
+            <h3 class="font-bold text-slate-800">Puntos clave</h3>
+            <div class="info-pill">
+              <span nz-icon nzType="trophy" class="text-emerald-500"></span>
+              <div>
+                <p class="label">Tema fuerte</p>
+                <p class="value">{{ strongestTopic().nameTopic || 'Sin datos' }}</p>
+              </div>
+            </div>
+            <div class="info-pill">
+              <span nz-icon nzType="flag" class="text-amber-500"></span>
+              <div>
+                <p class="label">Refuerzo recomendado</p>
+                <p class="value">{{ weakestTopic().nameTopic || 'Sin datos' }}</p>
+              </div>
+            </div>
+          </div>
+        </nz-card>
+
+        <nz-card class="rounded-3xl border-none dashboard-accent-card">
+          <div class="space-y-3">
+            <h3 class="font-bold text-white flex items-center gap-2">
+              <span nz-icon nzType="star"></span>
+              Ruta recomendada
+            </h3>
+            <p class="text-sm text-blue-100">Próximo tema sugerido</p>
+            <p class="text-xl font-extrabold text-white">
+              {{ recommendation()?.topicName || 'Generando recomendación...' }}
+            </p>
+            <p class="text-sm text-blue-100">
+              Nivel de dominio actual:
+              <span class="font-bold text-white">{{ recommendation()?.domainLevel ?? 0 }}%</span>
+            </p>
+            <a
+              routerLink="/alumno/recomendaciones"
+              class="inline-flex items-center gap-2 mt-2 text-sm font-bold text-white hover:text-blue-100 transition-colors"
+            >
+              Ir a mis recomendaciones
+              <span nz-icon nzType="arrow-right"></span>
+            </a>
+          </div>
+        </nz-card>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+      <a routerLink="/alumno/progreso/general" class="quick-link-card">
+        <span nz-icon nzType="rise" class="text-2xl text-blue-600"></span>
+        <p class="title">Ver mi progreso</p>
+        <p class="desc">Sigue tu avance por competencias.</p>
+      </a>
+
+      <a routerLink="/alumno/recomendaciones" class="quick-link-card">
+        <span nz-icon nzType="read" class="text-2xl text-indigo-600"></span>
+        <p class="title">Continuar recomendación</p>
+        <p class="desc">Accede al material sugerido para ti.</p>
+      </a>
+
+      <a routerLink="/alumno/test-inicial/results" class="quick-link-card">
+        <span nz-icon nzType="profile" class="text-2xl text-emerald-600"></span>
+        <p class="title">Revisar resultados</p>
+        <p class="desc">Consulta tu diagnóstico completo.</p>
+      </a>
+    </section>
+  } @else {
+    <section class="rounded-3xl bg-white border border-slate-100 p-8 md:p-14 text-center shadow-sm">
+      <div class="max-w-xl mx-auto space-y-4">
+        <div class="w-14 h-14 rounded-2xl bg-slate-100 text-slate-500 mx-auto flex items-center justify-center text-2xl">
+          <span nz-icon nzType="dashboard"></span>
+        </div>
+        <h2 class="text-2xl md:text-3xl font-black text-slate-800">Aun no hay datos para tu panel</h2>
+        <p class="text-slate-500">
+          Completa tu test inicial para desbloquear resultados, métricas y una ruta personalizada.
+        </p>
+        <button
+          nz-button
+          nzType="primary"
+          routerLink="/alumno/test-inicial"
+          class="h-11 px-8 rounded-xl font-bold border-none"
+        >
+          Comenzar test inicial
+        </button>
+      </div>
+    </section>
+  }
+</div>

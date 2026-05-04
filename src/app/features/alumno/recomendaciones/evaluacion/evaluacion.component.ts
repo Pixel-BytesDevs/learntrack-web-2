@@ -97,6 +97,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
       .subscribe((params) => {
         const topicId = params['topicId'];
         const userId = Number(this.tokenService.getUsername()) || 1;
+        console.log("userId: ",userId);
 
         if (topicId) {
           this.fetchEvaluation(userId, topicId);

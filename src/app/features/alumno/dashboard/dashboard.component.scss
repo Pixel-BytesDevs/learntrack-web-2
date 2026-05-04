@@ -1,0 +1,51 @@
+.dashboard-hero {
+  position: relative;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 35%),
+    radial-gradient(circle at 80% 30%, rgba(56, 189, 248, 0.25), transparent 40%),
+    linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 55%, #0f172a 100%);
+}
+
+.stat-chip {
+  @apply rounded-2xl bg-white/15 backdrop-blur-sm border border-white/20 p-3 flex items-center gap-3;
+}
+
+.stat-chip-label {
+  @apply text-[10px] uppercase tracking-widest font-black text-blue-100;
+}
+
+.stat-chip-value {
+  @apply text-xl font-black leading-none;
+}
+
+.dashboard-accent-card {
+  background: linear-gradient(145deg, #2563eb 0%, #1d4ed8 50%, #1e3a8a 100%);
+}
+
+.info-pill {
+  @apply p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3;
+}
+
+.label {
+  @apply text-[11px] uppercase tracking-widest text-slate-400 font-black;
+}
+
+.value {
+  @apply text-sm font-semibold text-slate-700;
+}
+
+.quick-link-card {
+  @apply rounded-3xl bg-white p-5 border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all;
+}
+
+.quick-link-card .title {
+  @apply mt-3 text-slate-800 font-bold;
+}
+
+.quick-link-card .desc {
+  @apply text-sm text-slate-500 mt-1;
+}
+
+.empty-state {
+  @apply rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 py-8 px-4 text-center text-slate-500 space-y-2;
+}
