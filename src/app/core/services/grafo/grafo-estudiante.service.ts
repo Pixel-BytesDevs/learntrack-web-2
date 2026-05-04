@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Services } from "../../../../environments/services/service.dev";
 import { BehaviorSubject, catchError, finalize, map, Observable, of, tap } from "rxjs";
+import { ActiveTopicResponse } from "../../interfaces/response/grafo/active-topic-response";
 import { TemaNodo } from "../../models/grafo.models";
 
 
@@ -42,6 +43,15 @@ export class GrafoEstudianteService {
 			catchError((error) => {
 				console.error('Error al inicializar el grafo del estudiante: ', error);
 				return of("ERROR");
+			}),
+		);
+	}
+
+	getActiveTopics(): Observable<ActiveTopicResponse[]> {
+		return this.http.get<ActiveTopicResponse[]>(`${this.apiUrl}/active-topics`).pipe(
+			catchError((error) => {
+				console.error('Error al obtener temas activos:', error);
+				return of([]);
 			}),
 		);
 	}

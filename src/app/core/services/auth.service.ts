@@ -4,7 +4,13 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PkceService } from './pkce.service';
 import { TokenService } from './token.service';
-import { LoginPayload, LoginResponse, RegisterPayload } from '../models/auth.models';
+import {
+	CreateAppUserDto,
+	LoginPayload,
+	LoginResponse,
+	RegisterPayload,
+	UserIdCreatedResponse,
+} from '../models/auth.models';
 import { environment } from '../../../environments/environments';
 
 
@@ -23,28 +29,6 @@ export class AuthService {
 			`${environment.auth_url}/auth/login`,
 			payload,
 		);
-	}
-
-	// ── Login con Google (flujo PKCE hacia Spring) ───────────────────
-
-	async loginWithGoogle(): Promise<void> {
-		const verifier = this.pkceService.generateCodeVerifier();
-		const challenge = await this.pkceService.generateCodeChallenge(verifier);
-
-		const params = new URLSearchParams({
-			response_type: 'code',
-			client_id: environment.client_id,
-			redirect_uri: environment.redirect_uri,
-			scope: environment.scope,
-			code_challenge: challenge,
-			code_challenge_method: 'S256',
-			// Le indica a Spring que arranque directo con Google
-			// sin mostrar su formulario intermedio de login
-			idp: 'google',
-		});
-
-		//window.location.href = `${environment.auth_url}/oauth2/authorize?${params}`;
-		window.location.href = `${environment.auth_url}/oauth2/authorize?${params}`;
 	}
 
 	// ── Intercambio de code por tokens (viene de /authorized) ────────
@@ -76,6 +60,13 @@ export class AuthService {
 
 	register(payload: RegisterPayload): Observable<any> {
 		return this.http.post(`${environment.auth_url}/auth/create`, payload);
+	}
+
+	createAppUser(dto: CreateAppUserDto): Observable<UserIdCreatedResponse> {
+		return this.http.post<UserIdCreatedResponse>(
+			`${environment.auth_url}/auth/create`,
+			dto,
+		);
 	}
 
 	// ── VARK ─────────────────────────────────────────────────────────

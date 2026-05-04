@@ -1,0 +1,157 @@
+<div class="max-w-2xl space-y-8">
+  <div>
+    <h1 class="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">
+      Crear usuario
+    </h1>
+    <p class="text-slate-500 mt-2">
+      Se crea la cuenta en el servicio de autenticación. Si el rol es estudiante, a continuación se registra el
+      alumno en el módulo de diagnóstico (datos personales y salón).
+    </p>
+  </div>
+
+  <form nz-form [formGroup]="form" nzLayout="vertical" (ngSubmit)="submit()" class="space-y-1">
+    <nz-form-item>
+      <nz-form-label nzRequired>Nombre</nz-form-label>
+      <nz-form-control nzErrorTip="Indica el nombre con el que iniciará sesión">
+        <nz-input-group nzPrefixIcon="user">
+          <input
+            nz-input
+            type="text"
+            formControlName="username"
+            placeholder="Nombre"
+            autocomplete="username"
+          />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Rol</nz-form-label>
+      <nz-form-control>
+        <nz-select formControlName="role" class="w-full" nzPlaceHolder="Selecciona el rol">
+          @for (opt of rolesOptions; track opt.value) {
+            <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+          }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    @if (form.controls.role.value === 'ROLE_USER') {
+      <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 md:p-6 space-y-4 mt-2">
+        <p class="text-sm font-bold text-slate-700 uppercase tracking-wide">Datos del alumno</p>
+
+        <nz-form-item class="mb-0">
+          <nz-form-label nzRequired>Primer nombre</nz-form-label>
+          <nz-form-control nzErrorTip="Requerido">
+            <input nz-input type="text" formControlName="primerNombre" placeholder="Primer nombre" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <nz-form-item class="mb-0">
+            <nz-form-label nzRequired>Apellido paterno</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <input nz-input type="text" formControlName="apellidoPaterno" placeholder="Apellido paterno" />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item class="mb-0">
+            <nz-form-label nzRequired>Apellido materno</nz-form-label>
+            <nz-form-control nzErrorTip="Requerido">
+              <input nz-input type="text" formControlName="apellidoMaterno" placeholder="Apellido materno" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <nz-form-item class="mb-0">
+            <nz-form-label nzRequired>Edad</nz-form-label>
+            <nz-form-control nzErrorTip="Indica una edad entre 1 y 120">
+              <nz-input-number
+                class="w-full"
+                formControlName="edad"
+                [nzMin]="1"
+                [nzMax]="120"
+                [nzStep]="1"
+                nzPlaceHolder="Edad"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item class="mb-0">
+            <nz-form-label nzRequired>Género</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="genero" class="w-full" nzPlaceHolder="Género">
+                @for (g of generoOptions; track g.value) {
+                  <nz-option [nzValue]="g.value" [nzLabel]="g.label"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <nz-form-item class="mb-0">
+          <nz-form-label nzRequired>Salón</nz-form-label>
+          <nz-form-control nzErrorTip="Selecciona un salón">
+            <nz-select formControlName="idSalon" class="w-full" nzPlaceHolder="Salón">
+              @for (s of salonOptions; track s.value) {
+                <nz-option [nzValue]="s.value" [nzLabel]="s.label"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    }
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Contraseña</nz-form-label>
+      <nz-form-control nzErrorTip="Mínimo 6 caracteres">
+        <nz-input-group [nzSuffix]="suffixPwd">
+          <input
+            nz-input
+            [type]="passwordVisible ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Contraseña"
+          />
+        </nz-input-group>
+        <ng-template #suffixPwd>
+          <span
+            nz-icon
+            class="cursor-pointer text-slate-400"
+            [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+            (click)="passwordVisible = !passwordVisible"
+          ></span>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Confirmar contraseña</nz-form-label>
+      <nz-form-control [nzErrorTip]="confirmErrorTpl">
+        <nz-input-group nzPrefixIcon="lock">
+          <input
+            nz-input
+            [type]="passwordVisible ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            placeholder="Repite la contraseña"
+          />
+        </nz-input-group>
+        <ng-template #confirmErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Confirma la contraseña
+          } @else if (form.hasError('passwordMismatch')) {
+            Las contraseñas no coinciden
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <button
+      nz-button
+      nzType="primary"
+      type="submit"
+      [nzLoading]="loading"
+      class="h-11 px-8 rounded-xl font-bold mt-4"
+    >
+      Crear usuario
+    </button>
+  </form>
+</div>

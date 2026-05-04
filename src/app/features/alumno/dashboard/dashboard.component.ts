@@ -7,9 +7,10 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { ActiveTopicResponse } from '../../../core/interfaces/response/grafo/active-topic-response';
 import { ScoreAndTopicResponse } from '../../../core/interfaces/response/cuestionario-nivel/score-and-topic-response';
 import { Recommendation } from '../../../core/models/recomendation.models';
-import { ResultLevelTestResponse } from '../../../core/interfaces/response/cuestionario-nivel/result-level-test-response';
+import { GrafoEstudianteService } from '../../../core/services/grafo/grafo-estudiante.service';
 import { RecomendationStateService } from '../../../core/services/recomendation/recomendation-state.service';
 import { AppStore } from '../../../state/app.store';
 
@@ -32,10 +33,11 @@ export class DashboardComponent {
   private readonly emptyTopic: ScoreAndTopicResponse = { nameTopic: 'Sin datos', score: 0 };
   private readonly store = inject(AppStore);
   private readonly recommendationState = inject(RecomendationStateService);
+  private readonly grafoEstudiante = inject(GrafoEstudianteService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly recommendation = signal<Recommendation | null>(null);
-  readonly levelResults = signal<ResultLevelTestResponse | null>(null);
+  readonly activeTopics = signal<ActiveTopicResponse[]>([]);
 
   readonly studentName = computed(() => {
     const fullName = this.store.user()?.name?.trim();
@@ -43,49 +45,47 @@ export class DashboardComponent {
     return fullName.split(' ')[0];
   });
 
+  readonly topicRows = computed(() =>
+    this.activeTopics().map((t) => ({
+      id: t.id,
+      nameTopic: t.name,
+      score: Math.round(Number(t.domain)),
+    })),
+  );
+
   readonly averageScore = computed(() => {
-    const scores = this.levelResults()?.scores ?? [];
-    if (!scores.length) return 0;
-    const total = scores.reduce((acc, item) => acc + item.score, 0);
-    return Math.round(total / scores.length);
+    const topics = this.activeTopics();
+    if (!topics.length) return 0;
+    const total = topics.reduce((acc, t) => acc + Number(t.domain), 0);
+    return Math.round(total / topics.length);
   });
 
   readonly strongestTopic = computed(() => {
-    const scores = this.levelResults()?.scores ?? [];
-    return scores.reduce(
-      (best, item) => (item.score > best.score ? item : best),
-      scores[0] ?? this.emptyTopic,
-    );
+    const topics = this.activeTopics();
+    if (!topics.length) return this.emptyTopic;
+    const best = topics.reduce((b, t) => (Number(t.domain) > Number(b.domain) ? t : b));
+    return { nameTopic: best.name, score: Math.round(Number(best.domain)) };
   });
 
   readonly weakestTopic = computed(() => {
-    const scores = this.levelResults()?.scores ?? [];
-    return scores.reduce(
-      (lowest, item) => (item.score < lowest.score ? item : lowest),
-      scores[0] ?? this.emptyTopic,
-    );
+    const topics = this.activeTopics();
+    if (!topics.length) return this.emptyTopic;
+    const worst = topics.reduce((w, t) => (Number(t.domain) < Number(w.domain) ? t : w));
+    return { nameTopic: worst.name, score: Math.round(Number(worst.domain)) };
   });
 
   readonly hasData = computed(
-    () => !!this.recommendation() || (this.levelResults()?.scores?.length ?? 0) > 0,
+    () => !!this.recommendation() || this.activeTopics().length > 0,
   );
 
   constructor() {
-    this.loadLevelResults();
+    this.grafoEstudiante
+      .getActiveTopics()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((topics) => this.activeTopics.set(topics ?? []));
+
     this.recommendationState.recommendation$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((recommendation) => this.recommendation.set(recommendation));
-  }
-
-  private loadLevelResults(): void {
-    const cached = localStorage.getItem('placement-results');
-    if (!cached) return;
-
-    try {
-      const parsed = JSON.parse(cached) as ResultLevelTestResponse;
-      this.levelResults.set(parsed);
-    } catch (error) {
-      console.error('No se pudo leer placement-results', error);
-    }
   }
 }

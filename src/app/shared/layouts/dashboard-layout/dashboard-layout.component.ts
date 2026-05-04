@@ -36,7 +36,21 @@ import { AppStore } from '../../../state/app.store';
           class="bg-white border-r border-slate-100 shadow-sm pt-4 hidden md:block overflow-y-auto overflow-x-hidden relative"
         >
           <ul nz-menu nzMode="inline" class="border-none pb-24">
-            
+            @if (store.user()?.role === 'ROLE_ADMIN') {
+              <li nz-menu-group nzTitle="Administración">
+                <ul>
+                  <li
+                    nz-menu-item
+                    routerLink="/admin/dashboard"
+                    routerLinkActive="ant-menu-item-selected"
+                  >
+                    <span nz-icon nzType="user-add"></span>
+                    <span>Crear usuarios</span>
+                  </li>
+                </ul>
+              </li>
+            }
+
             @if (store.user()?.role === 'ROLE_USER') {
               <li nz-menu-group nzTitle="Panel del Estudiante">
                 <ul>

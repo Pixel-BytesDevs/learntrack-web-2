@@ -29,8 +29,8 @@
         <div class="stat-chip">
           <span nz-icon nzType="book" class="text-xl"></span>
           <div>
-            <p class="stat-chip-label">Temas medidos</p>
-            <p class="stat-chip-value">{{ levelResults()?.scores?.length ?? 0 }}</p>
+            <p class="stat-chip-label">Temas activos</p>
+            <p class="stat-chip-value">{{ activeTopics().length }}</p>
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@
         <div class="space-y-5">
           <div class="flex items-center justify-between gap-4">
             <h2 class="text-lg md:text-xl font-bold text-slate-800">
-              Resultados del diagnóstico de nivel
+              Temas activos
             </h2>
             <a
               routerLink="/alumno/test-inicial/results"
@@ -53,9 +53,9 @@
             </a>
           </div>
 
-          @if ((levelResults()?.scores?.length ?? 0) > 0) {
+          @if (topicRows().length > 0) {
             <div class="space-y-4">
-              @for (topic of levelResults()?.scores; track topic.nameTopic) {
+              @for (topic of topicRows(); track topic.id) {
                 <div class="space-y-2">
                   <div class="flex items-end justify-between">
                     <p class="font-semibold text-slate-700">{{ topic.nameTopic }}</p>
@@ -74,7 +74,7 @@
           } @else {
             <div class="empty-state">
               <span nz-icon nzType="bar-chart" class="text-2xl text-slate-400"></span>
-              <p>Aun no hay resultados de nivel disponibles.</p>
+              <p>Aun no hay temas activos con dominio registrado.</p>
             </div>
           }
         </div>

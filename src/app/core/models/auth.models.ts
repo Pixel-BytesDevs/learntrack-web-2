@@ -26,3 +26,10 @@ export interface RegisterPayload {
   password: string;
   roles:    string[];
 }
+
+/** Cuerpo para crear usuario en el servicio de auth (misma forma que registro). */
+export type CreateAppUserDto = RegisterPayload;
+
+export interface UserIdCreatedResponse {
+  id: number;
+}

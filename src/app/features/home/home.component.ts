@@ -61,17 +61,10 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
               nz-button
               nzType="primary"
               class="h-14 px-10 text-lg font-bold rounded-xl shadow-lg shadow-blue-200 hover:scale-105 transition-transform"
-              routerLink="/register"
+              routerLink="/login"
             >
-              Empezar como Estudiante
+              Iniciar sesión
               <span nz-icon nzType="arrow-right" class="ml-2"></span>
-            </button>
-            <button
-              nz-button
-              nzType="default"
-              class="h-14 px-10 text-lg font-bold rounded-xl border-2 hover:bg-slate-50 transition-all"
-            >
-              Soy Profesor
             </button>
           </div>
 

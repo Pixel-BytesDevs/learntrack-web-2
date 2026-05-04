@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 // Ng-Zorro Imports
@@ -21,7 +21,6 @@ import { AppStore } from '../../../state/app.store';
   standalone: true,
   imports: [CommonModule,
     ReactiveFormsModule,
-    RouterLink,
     NzFormModule,
     NzInputModule,
     NzButtonModule,
@@ -42,16 +41,16 @@ export class LoginComponent {
   passwordVisible = false;
 
   form = this.fb.nonNullable.group({
-    email: ['', [Validators.required]],
+    username: ['', [Validators.required]],
     password: ['', [Validators.required]],
-    remember: [false]
+    remember: [false],
   });
 
-  get email() { return this.form.controls.email; }
-  get password() { return this.form.controls.password; }
-
-  async loginWithGoogle(): Promise<void> {
-    await this.authService.loginWithGoogle();
+  get username() {
+    return this.form.controls.username;
+  }
+  get password() {
+    return this.form.controls.password;
   }
 
   submit(): void {
@@ -61,9 +60,9 @@ export class LoginComponent {
     }
 
     this.loading = true;
-    const { email, password } = this.form.getRawValue();
+    const { username, password } = this.form.getRawValue();
 
-    this.authService.login({ username: email, password }).subscribe({
+    this.authService.login({ username: username.trim(), password }).subscribe({
       next: (res) => {
         this.tokenService.setTokens(res.access_token, res.refresh_token);
         this.store.setAuth(); // Actualiza el estado global
@@ -71,7 +70,7 @@ export class LoginComponent {
         this.redirectByRole();
       },
       error: (err) => {
-        const errorMsg = err?.error?.message || 'Correo o contraseña incorrectos';
+        const errorMsg = err?.error?.message || 'Usuario o contraseña incorrectos';
         this.message.error(errorMsg);
         this.loading = false;
       },

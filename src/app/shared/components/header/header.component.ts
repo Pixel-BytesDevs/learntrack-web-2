@@ -87,19 +87,11 @@ import { AppStore } from '../../../state/app.store';
             <div class="flex items-center gap-3">
               <button
                 nz-button
-                nzType="text"
-                routerLink="/login"
-                class="font-bold text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl px-5 h-11"
-              >
-                Entrar
-              </button>
-              <button
-                nz-button
                 nzType="primary"
-                routerLink="/register"
+                routerLink="/login"
                 class="bg-blue-600 hover:bg-blue-700 border-none font-bold rounded-xl px-6 h-11 shadow-md shadow-blue-100"
               >
-                Pruébalo gratis
+                Iniciar sesión
               </button>
             </div>
           } @else {
@@ -229,14 +221,9 @@ import { AppStore } from '../../../state/app.store';
 
         <li nz-menu-divider></li>
         @if (!store.isAuthenticated()) {
-          <li
-            nz-menu-item
-            routerLink="/auth/login"
-            class="text-blue-600 font-bold"
-          >
-            Iniciar Sesión
+          <li nz-menu-item routerLink="/login" class="text-blue-600 font-bold">
+            Iniciar sesión
           </li>
-          <li nz-menu-item routerLink="/register">Registrarse</li>
         } @else {
           <li nz-menu-item routerLink="/perfil">Mi Perfil</li>
           <li

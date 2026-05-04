@@ -41,13 +41,6 @@ export const routes: Routes = [
             (m) => m.LoginComponent,
           ),
       },
-      {
-        path: 'register',
-        loadComponent: () =>
-          import('./features/auth/register/register.component').then(
-            (m) => m.RegisterComponent,
-          ),
-      },
     ],
   },
 
@@ -99,6 +92,15 @@ export const routes: Routes = [
     component: DashboardLayoutComponent, // Este es el nuevo Layout
     canActivate: [authGuard],
     children: [
+      {
+        path: 'admin/dashboard',
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_ADMIN'] },
+        loadComponent: () =>
+          import('./features/admin/crear-usuario/admin-crear-usuario.component').then(
+            (m) => m.AdminCrearUsuarioComponent,
+          ),
+      },
       // Alumno
       {
         path: 'alumno/dashboard',

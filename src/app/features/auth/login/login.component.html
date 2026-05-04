@@ -4,50 +4,20 @@
       Bienvenido de nuevo. Por favor inicie sesión en su cuenta
     </p>
 
-    <div class="flex gap-4">
-      <button nz-button nzType="default" type="button" class="social-btn">
-        <span
-          nz-icon
-          nzType="facebook"
-          nzTheme="fill"
-          class="text-blue-600"
-        ></span>
-        <span class="text-color-black font-semibold">Facebook</span>
-      </button>
-      <button
-        nz-button
-        nzType="default"
-        type="button"
-        (click)="loginWithGoogle()"
-        class="social-btn"
-      >
-        <span nz-icon nzType="google" class="text-red-500"></span>
-        <span class="text-color-black font-semibold">Google</span>
-      </button>
-    </div>
-
-    <div class="flex items-center gap-3 my-1 opacity-40">
-      <div class="flex-1 h-[1px] bg-white"></div>
-      <span
-        class="text-[10px] text-white font-bold uppercase tracking-widest px-2"
-        >O accede con</span
-      >
-      <div class="flex-1 h-[1px] bg-white"></div>
-    </div>
-
     <div class="flex flex-col gap-4">
       <nz-form-item>
-        <nz-form-control nzErrorTip="Por favor, ingresa tu correo">
-          <nz-input-group [nzPrefix]="prefixEmail" class="modern-input-group">
+        <nz-form-control nzErrorTip="Por favor, ingresa tu nombre de usuario">
+          <nz-input-group [nzPrefix]="prefixUser" class="modern-input-group">
             <input
-              type="email"
+              type="text"
               nz-input
-              formControlName="email"
-              placeholder="Correo"
+              formControlName="username"
+              placeholder="Nombre de usuario"
+              autocomplete="username"
             />
           </nz-input-group>
-          <ng-template #prefixEmail
-            ><span nz-icon nzType="mail" class="opacity-50"></span
+          <ng-template #prefixUser
+            ><span nz-icon nzType="user" class="opacity-50"></span
           ></ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -110,16 +80,4 @@
       Iniciar sesión
     </button>
   </form>
-
-  <div class="flex justify-center items-center gap-2">
-    <p class="text-color-inverse m-0 opacity-70">¿No tienes cuenta?</p>
-    <button
-      nz-button
-      nzType="link"
-      routerLink="/register"
-      class="text-color-secondary-2 p-0 font-bold hover:underline"
-    >
-      Regístrate
-    </button>
-  </div>
 </div>

@@ -9,18 +9,29 @@ export const authGuard: CanActivateFn = () => {
 
   if (tokenService.isLoggedIn()) return true;
 
-  router.navigate(['/auth/login']);
+  router.navigate(['/login']);
   return false;
 };
 
-// Evita que usuarios logeados vean Login/Register
+// Evita que usuarios autenticados vuelvan a la pantalla de login
 export const publicGuard: CanActivateFn = () => {
   const tokenService = inject(TokenService);
   const router = inject(Router);
 
   if (!tokenService.isLoggedIn()) return true;
 
-  router.navigate(['/']); // O al dashboard correspondiente
+  const roles = tokenService.getRoles();
+  if (roles.includes('ROLE_ADMIN')) {
+    router.navigate(['/admin/dashboard']);
+  } else if (roles.includes('ROLE_PROFESOR')) {
+    router.navigate(['/profesor/dashboard']);
+  } else if (roles.includes('ROLE_USER')) {
+    router.navigate(
+      tokenService.isFirstLogin() ? ['/alumno/test-inicial'] : ['/alumno/dashboard'],
+    );
+  } else {
+    router.navigate(['/']);
+  }
   return false;
 };
 

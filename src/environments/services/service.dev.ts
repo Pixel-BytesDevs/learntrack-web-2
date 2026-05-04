@@ -7,7 +7,8 @@ export const Services = Object.freeze({
         insertCuestionarioIrl: 'http://26.138.194.69:8092/cuestionarios/respuestas?reemplazar=true',
         cuestionarioNivel: 'http://26.138.194.69:8092/api/placement',
         grafoEstudiante: 'http://26.138.194.69:8092/api/usuario-topic',
-        evaluacion: 'http://26.138.194.69:8092/api/recommendation-evaluation'
+        evaluacion: 'http://26.138.194.69:8092/api/recommendation-evaluation',
+        alumno: 'http://26.138.194.69:8092/alumno',
     },
     auth: {
         login: 'http://26.138.194.69:1000/auth',
