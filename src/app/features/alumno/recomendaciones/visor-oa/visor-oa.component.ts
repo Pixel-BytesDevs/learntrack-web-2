@@ -48,7 +48,9 @@ export class VisorOaComponent implements OnInit, OnDestroy {
     if (!rec) return [];
     return rec.learningObjects
       .filter(oa => oa.recommendationId !== current?.recommendationId)
-      .sort((a, b) => b.stylePercentage - a.stylePercentage)
+      .sort(
+        (a, b) => (b.stylePercentage ?? 0) - (a.stylePercentage ?? 0),
+      )
       .slice(0, 3);
   });
 

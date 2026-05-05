@@ -43,7 +43,7 @@ export class OaRecomendadaComponent implements OnInit, OnDestroy {
   ]);
 
   ngOnInit(): void {
-    const userId = Number(this.tokenService.getUsername()) || 1;
+    const userId = this.tokenService.getUserId();
 
     // Suscribirse al estado global de recomendaciones
     this.stateService.recommendation$
@@ -57,17 +57,19 @@ export class OaRecomendadaComponent implements OnInit, OnDestroy {
         }
       });
 
-    // Iniciar el Polling (cada 5 segundos)
-    this.recomendacionService
-      .pollRecommendation(userId, this.stopPolling$, 5000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
+    if (userId > 0) {
+      // Iniciar el Polling (cada 5 segundos)
+      this.recomendacionService
+        .pollRecommendation(userId, this.stopPolling$, 5000)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe();
+    }
   }
 
   getBestOA(learningObjects: OAData[]): OAData | undefined {
     if (!learningObjects?.length) return undefined;
-    return learningObjects.reduce((best, current) => 
-      current.stylePercentage > best.stylePercentage ? current : best
+    return learningObjects.reduce((best, current) =>
+      (current.stylePercentage ?? 0) > (best.stylePercentage ?? 0) ? current : best,
     );
   }
 
