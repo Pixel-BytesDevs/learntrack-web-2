@@ -1,5 +1,6 @@
 <div class="max-w-[1600px] mx-auto p-4 md:p-8 space-y-6 animate-in fade-in duration-700">
   
+  <!-- Header de Navegación -->
   <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
     <div class="flex items-center gap-4">
       <button nz-button nzType="text" (click)="goBack()" class="flex items-center text-slate-500 hover:text-blue-600 font-bold">
@@ -8,7 +9,7 @@
       <div class="h-6 w-[1px] bg-slate-200"></div>
       <div>
         <h1 class="text-lg font-black text-slate-800 leading-tight">{{ recommendation()?.topicName }}</h1>
-        <p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Módulo de Aprendizaje Adaptativo</p>
+        <p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Recurso: {{ selectedResource()?.title }}</p>
       </div>
     </div>
     
@@ -20,94 +21,122 @@
 
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
     
+    <!-- LADO IZQUIERDO: VISOR PRINCIPAL -->
     <div class="lg:col-span-8 space-y-6">
       
-      <div class="bg-black rounded-[2.5rem] overflow-hidden shadow-2xl aspect-video relative group">
+      <div class="bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl aspect-video relative group flex items-center justify-center">
+        
+        <!-- CASE: VIDEO -->
         @if (selectedResource()?.typeName === TiposMaterial.VIDEO) {
           <video 
             #videoPlayer
-            (timeupdate)="onTimeUpdate()"
+            (timeupdate)="onTimeUpdate($event)"
             class="w-full h-full object-contain"
             [src]="selectedResource()?.s3Url">
           </video>
           
-          <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+          <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
             <div class="space-y-3">
-              <nz-progress [nzPercent]="videoProgress()" [nzShowInfo]="false" nzStatus="active" [nzStrokeWidth]="4" class="video-progress"></nz-progress>
+              <nz-progress [nzPercent]="progress()" [nzShowInfo]="false" nzStatus="active" [nzStrokeWidth]="4"></nz-progress>
               <div class="flex items-center justify-between text-white font-mono text-xs">
                 <div class="flex items-center gap-4">
                   <button (click)="togglePlay()" class="text-2xl hover:scale-110 transition-transform">
                     <span nz-icon [nzType]="isPlaying() ? 'pause-circle' : 'play-circle'"></span>
                   </button>
-                  <span>{{ formatTime(currentTime()) }} / {{ formatTime(videoDuration()) }}</span>
+                  <span>{{ formatTime(currentTime()) }} / {{ formatTime(duration()) }}</span>
                 </div>
-                <span class="bg-blue-600 px-2 py-1 rounded">HD</span>
+                <span class="bg-blue-600 px-2 py-1 rounded text-[10px] font-bold">VIDEO HD</span>
               </div>
             </div>
           </div>
-        } @else if (selectedResource()?.typeName === TiposMaterial.DOCUMENTO) {
-          <embed [src]="selectedResource()?.s3Url" type="application/pdf" class="w-full h-full rounded-[2.5rem]" />
-        } @else {
-          <div class="w-full h-full flex flex-col items-center justify-center text-slate-500 gap-4">
+        } 
+
+        <!-- CASE: AUDIO -->
+        @else if (selectedResource()?.typeName === TiposMaterial.AUDIO) {
+          <div class="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-indigo-900 to-slate-900 p-12 text-center">
+            <div class="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mb-6 animate-pulse">
+              <span nz-icon nzType="customer-service" class="text-5xl text-white"></span>
+            </div>
+            <h3 class="text-white text-xl font-bold mb-2">Reproduciendo Audio</h3>
+            <p class="text-indigo-200 text-sm mb-8">Escucha atentamente el material para tu aprendizaje.</p>
+            
+            <audio #audioPlayer (timeupdate)="onTimeUpdate($event)" [src]="selectedResource()?.s3Url"></audio>
+            
+            <div class="w-full max-w-md space-y-4">
+              <nz-progress [nzPercent]="progress()" [nzShowInfo]="false" nzStatus="active" [nzStrokeColor]="'#6366f1'"></nz-progress>
+              <div class="flex items-center justify-center gap-6">
+                <button (click)="togglePlay()" class="text-5xl text-white hover:text-indigo-400 transition-colors">
+                  <span nz-icon [nzType]="isPlaying() ? 'pause-circle' : 'play-circle'"></span>
+                </button>
+              </div>
+              <p class="text-indigo-300 font-mono text-xs">{{ formatTime(currentTime()) }} / {{ formatTime(duration()) }}</p>
+            </div>
+          </div>
+        }
+
+        <!-- CASE: DOCUMENTO (PDF) -->
+        @else if (selectedResource()?.typeName === TiposMaterial.DOCUMENTO) {
+          <iframe 
+            [src]="safeUrl()" 
+            class="w-full h-full border-none"
+            title="Visor de Documentos">
+          </iframe>
+        } 
+
+        <!-- CASE: FALLBACK -->
+        @else {
+          <div class="w-full h-full flex flex-col items-center justify-center text-slate-400 gap-4">
             <span nz-icon nzType="file-unknown" class="text-6xl"></span>
-            <p class="font-bold">Formato de recurso no previsualizable</p>
-            <a [href]="selectedResource()?.s3Url" target="_blank" nz-button nzType="primary">Abrir en nueva pestaña</a>
+            <p class="font-bold">Formato no compatible para previsualización</p>
+            <a [href]="selectedResource()?.s3Url" target="_blank" nz-button nzType="primary" class="rounded-lg">Descargar Recurso</a>
           </div>
         }
       </div>
 
+      <!-- Detalles del recurso -->
       <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
         <div class="flex flex-wrap items-center gap-3 mb-4">
           <nz-tag [nzColor]="'blue'" class="rounded-lg font-bold border-none capitalize">{{ selectedResource()?.styleName }}</nz-tag>
           <nz-tag [nzColor]="'purple'" class="rounded-lg font-bold border-none">{{ selectedResource()?.typeName }}</nz-tag>
           <span class="text-slate-300 text-xs">•</span>
-          <span class="text-slate-400 text-xs font-bold">Publicado por LearnTrack AI</span>
+          <span class="text-slate-400 text-xs font-bold">{{ selectedResource()?.estimatedDuration }} min de duración estimada</span>
         </div>
-        <h2 class="text-2xl font-bold text-slate-800 mb-4">{{ selectedResource()?.title || 'Título del Recurso' }}</h2>
+        <h2 class="text-2xl font-bold text-slate-800 mb-4">{{ selectedResource()?.title }}</h2>
         <p class="text-slate-600 leading-relaxed">
-          Este objeto de aprendizaje ha sido seleccionado específicamente para ti. Utiliza un enfoque 
-          <strong>{{ selectedResource()?.styleName }}</strong> que maximiza tu retención según tu perfil VARK.
+          Este objeto de aprendizaje ha sido seleccionado para fortalecer tu estilo <strong>{{ selectedResource()?.styleName }}</strong>. 
+          Al finalizar, estarás listo para la evaluación de <strong>{{ recommendation()?.topicName }}</strong>.
         </p>
       </div>
     </div>
 
+    <!-- LADO DERECHO: MATERIAL COMPLEMENTARIO -->
     <div class="lg:col-span-4 space-y-6">
-      
       <nz-card class="rounded-3xl border-none shadow-sm bg-indigo-50/50">
         <h3 class="text-indigo-900 font-bold flex items-center gap-2 mb-4">
-          <span nz-icon nzType="target" class="text-lg"></span> Objetivos de la sesión
+          <span nz-icon nzType="info-circle" class="text-lg"></span> Recomendación IA
         </h3>
-        <ul class="space-y-3">
-          <li class="flex gap-3 text-sm text-indigo-800 font-medium">
-            <span class="text-indigo-400 mt-1">✔</span> Identificar los términos de una ecuación.
-          </li>
-          <li class="flex gap-3 text-sm text-indigo-800 font-medium">
-            <span class="text-indigo-400 mt-1">✔</span> Aplicar la propiedad de transposición.
-          </li>
-          <li class="flex gap-3 text-sm text-indigo-800 font-medium">
-            <span class="text-indigo-400 mt-1">✔</span> Resolver problemas de contexto real.
-          </li>
-        </ul>
+        <p class="text-xs text-indigo-800 leading-relaxed">
+          Hemos detectado que este material tiene un <b>{{ selectedResource()?.stylePercentage }}% de afinidad</b> con tu perfil. 
+          Te recomendamos tomar notas de los puntos clave.
+        </p>
       </nz-card>
 
       <div class="space-y-4">
-        <h3 class="text-slate-800 font-bold flex items-center justify-between px-2">
-          <span>Material sugerido</span>
-          <span class="text-[10px] bg-slate-200 text-slate-500 px-2 py-0.5 rounded-full uppercase">IA Pick</span>
-        </h3>
-        
+        <h3 class="text-slate-800 font-bold px-2">Otros recursos del tema</h3>
         <div class="space-y-3">
-          @for (res of complementaryResources(); track res.recommendationId) {
+          @for (res of complementaryResources(); track res.idObject) {
             <div (click)="selectResource(res)" 
                  class="group bg-white p-4 rounded-2xl border border-slate-100 shadow-sm cursor-pointer hover:border-blue-300 hover:shadow-md transition-all">
               <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-xl group-hover:bg-blue-50 transition-colors">
-                  {{ res.typeName === 'Video' ? '🎬' : '📄' }}
+                  @if (res.typeName === TiposMaterial.VIDEO) { 🎬 }
+                  @else if (res.typeName === TiposMaterial.AUDIO) { 🎧 }
+                  @else { 📄 }
                 </div>
                 <div class="flex-1">
-                  <h4 class="text-sm font-bold text-slate-700 leading-tight group-hover:text-blue-600 transition-colors">{{ res.title }}</h4>
+                  <h4 class="text-sm font-bold text-slate-700 leading-tight group-hover:text-blue-600 transition-colors line-clamp-1">{{ res.title }}</h4>
                   <div class="flex items-center gap-2 mt-1">
-                    <span class="text-[10px] font-bold text-slate-400">{{ res.estimatedDuration }} min</span>
+                    <span class="text-[10px] font-bold text-slate-400">{{ res.typeName }}</span>
                     <span class="text-[10px] font-black text-blue-500 bg-blue-50 px-1.5 rounded">{{ res.stylePercentage }}% match</span>
                   </div>
                 </div>
@@ -116,7 +145,6 @@
           }
         </div>
       </div>
-
     </div>
   </div>
 </div>
