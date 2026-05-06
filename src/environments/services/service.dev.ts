@@ -9,6 +9,7 @@ export const Services = Object.freeze({
         grafoEstudiante: 'http://26.138.194.69:8092/api/usuario-topic',
         evaluacion: 'http://26.138.194.69:8092/api/recommendation-evaluation',
         alumno: 'http://26.138.194.69:8092/alumno',
+        recomendation: 'http://26.138.194.69:5000/api/v1/recommendations',
     },
     auth: {
         login: 'http://26.138.194.69:1000/auth',

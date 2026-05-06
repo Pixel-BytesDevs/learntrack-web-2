@@ -15,12 +15,13 @@ import {
 } from 'rxjs';
 import { RecomendationStateService } from './recomendation-state.service';
 import { OAData, Recommendation } from '../../models/recomendation.models';
+import { Services } from '../../../../environments/services/service.dev';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecomendacionService {
-  private apiUrl = 'http://26.138.194.69:5000/api/v1/recommendations';
+  private apiUrl = Services.moduloAlumno.recomendation;
   tokenService = inject(TokenService);
 
   private stopPolling$ = new Subject<void>();
