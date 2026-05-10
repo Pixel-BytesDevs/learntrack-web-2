@@ -22,7 +22,7 @@ import { GrafoEstudianteService } from '../../../../core/services/grafo/grafo-es
   imports: [CommonModule, NzSpinModule, NzCardModule],
   template: `
     <div
-      class="relative w-full h-[600px] bg-slate-50 rounded-[2.5rem] border border-slate-100 overflow-hidden shadow-inner"
+      class="relative w-full min-h-[280px] h-[52vh] max-h-[720px] sm:h-[58vh] md:h-[600px] md:max-h-none bg-slate-50 rounded-2xl md:rounded-[2.5rem] border border-slate-100 overflow-hidden shadow-inner touch-pan-x touch-pan-y"
     >
       @if (loading()) {
         <div
@@ -33,7 +33,7 @@ import { GrafoEstudianteService } from '../../../../core/services/grafo/grafo-es
       }
 
       <div
-        class="absolute top-6 left-6 z-10 bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-slate-200 shadow-sm text-xs space-y-2"
+        class="absolute top-3 left-3 right-3 sm:top-6 sm:left-6 sm:right-auto z-10 bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm text-[11px] sm:text-xs space-y-1.5 sm:space-y-2 max-w-[calc(100%-1.5rem)] sm:max-w-none"
       >
         <p
           class="font-bold text-slate-400 uppercase tracking-widest mb-2 text-[10px]"

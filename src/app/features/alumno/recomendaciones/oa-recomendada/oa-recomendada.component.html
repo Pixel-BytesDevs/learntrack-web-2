@@ -1,19 +1,19 @@
-<div class="max-w-5xl mx-auto py-6 px-4 space-y-8">
+<div class="max-w-5xl mx-auto py-5 sm:py-6 px-4 space-y-6 sm:space-y-8 w-full min-w-0">
   <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-    <div class="space-y-1">
+    <div class="space-y-1 min-w-0">
       <nz-tag
         nzColor="blue"
         class="rounded-full font-black px-4 uppercase tracking-widest text-[10px] border-none bg-blue-100 text-blue-600 mb-2"
       >
         Tu Próximo Reto
       </nz-tag>
-      <h1 class="text-4xl font-black text-slate-900 tracking-tight">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight break-words">
         {{ recommendation()?.topicName || "Calculando tu ruta..." }}
       </h1>
     </div>
 
     <div
-      class="flex items-center gap-3 bg-white p-2 rounded-2xl border border-slate-100 shadow-sm"
+      class="flex items-center gap-3 bg-white p-2 rounded-2xl border border-slate-100 shadow-sm shrink-0 self-start md:self-auto"
     >
       <div
         class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl"
@@ -47,7 +47,7 @@
       <div
         class="absolute bottom-0 left-0 p-8 md:p-12 w-full flex flex-col md:flex-row md:items-end justify-between gap-6"
       >
-        <div class="space-y-4 max-w-2xl">
+        <div class="space-y-3 sm:space-y-4 max-w-2xl min-w-0">
           <div class="flex flex-wrap gap-2">
             <nz-tag
               class="bg-white/10 backdrop-blur-md border-white/20 text-white font-bold rounded-lg px-3"
@@ -68,11 +68,11 @@
             </nz-tag>
           </div>
 
-          <h2 class="text-3xl md:text-5xl font-black text-white leading-tight">
+          <h2 class="text-2xl sm:text-3xl md:text-5xl font-black text-white leading-tight break-words">
             {{ recommendation()?.topicName }}
           </h2>
           <p
-            class="text-slate-300 text-lg font-medium leading-relaxed line-clamp-2"
+            class="text-slate-300 text-base sm:text-lg font-medium leading-relaxed line-clamp-3 sm:line-clamp-2"
           >
             Domina este tema con un contenido optimizado para tu estilo de
             aprendizaje
@@ -100,7 +100,7 @@
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div
-      class="lg:col-span-2 bg-white rounded-3xl p-8 border border-slate-100 shadow-sm space-y-6"
+      class="lg:col-span-2 bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-100 shadow-sm space-y-5 sm:space-y-6"
     >
       <div class="flex items-center gap-3">
         <div
@@ -163,7 +163,7 @@
     </div>
 
     <div
-      class="bg-slate-50 rounded-3xl p-8 border border-slate-200/60 space-y-6"
+      class="bg-slate-50 rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-200/60 space-y-5 sm:space-y-6"
     >
       <div class="flex items-center gap-3">
         <div

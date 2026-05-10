@@ -25,7 +25,7 @@ import { AppStore } from '../../../state/app.store';
       class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-[1000] transition-all duration-300"
     >
       <div
-        class="container mx-auto px-6 h-20 flex items-center justify-between"
+        class="container mx-auto px-4 sm:px-6 h-[4.5rem] sm:h-20 flex items-center justify-between gap-2 min-w-0"
       >
         <div
           class="flex items-center gap-2.5 cursor-pointer group"
@@ -40,7 +40,7 @@ import { AppStore } from '../../../state/app.store';
               class="h-7 w-auto brightness-200"
             />
           </div>
-          <span class="text-2xl font-black tracking-tighter text-slate-800">
+          <span class="text-xl sm:text-2xl font-black tracking-tighter text-slate-800 truncate">
             Learn<span class="text-blue-600">Track</span>
           </span>
         </div>
@@ -206,16 +206,44 @@ import { AppStore } from '../../../state/app.store';
     </nz-dropdown-menu>
 
     <nz-dropdown-menu #mobileMenu="nzDropdownMenu">
-      <ul nz-menu class="min-w-[200px] rounded-xl p-2">
+      <ul nz-menu class="min-w-[220px] max-w-[min(100vw-2rem,320px)] rounded-xl p-2">
         <li nz-menu-item routerLink="/" class="font-bold">Inicio</li>
 
-        @if (store.isAuthenticated()) {
+        @if (store.isAuthenticated() && store.user()?.role !== 'ROLE_USER') {
           <li
             nz-menu-item
             [routerLink]="dashboardLink"
             class="text-blue-600 font-bold"
           >
             <span nz-icon nzType="appstore" class="mr-2"></span> Mi Panel
+          </li>
+        }
+
+        @if (store.isAuthenticated() && store.user()?.role === 'ROLE_USER') {
+          <li nz-menu-divider></li>
+          <li
+            nz-menu-item
+            routerLink="/alumno/dashboard"
+            class="font-semibold text-blue-600"
+          >
+            <span nz-icon nzType="appstore" class="mr-2"></span>
+            Vista Principal
+          </li>
+          <li
+            nz-menu-item
+            routerLink="/alumno/recomendaciones"
+            class="font-semibold"
+          >
+            <span nz-icon nzType="star" class="mr-2 text-slate-500"></span>
+            Mis Recomendaciones
+          </li>
+          <li
+            nz-menu-item
+            routerLink="/alumno/progreso"
+            class="font-semibold"
+          >
+            <span nz-icon nzType="rise" class="mr-2 text-slate-500"></span>
+            Mi Progreso
           </li>
         }
 
@@ -226,6 +254,7 @@ import { AppStore } from '../../../state/app.store';
           </li>
         } @else {
           <li nz-menu-item routerLink="/perfil">Mi Perfil</li>
+          <li nz-menu-item routerLink="/configuracion">Ajustes</li>
           <li
             nz-menu-item
             (click)="store.logout()"

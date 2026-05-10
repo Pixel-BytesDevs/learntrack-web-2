@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 // Aquí debajo ya estarán los estilos de Ng-Zorro agregados por el comando ng add
 :root {
   --color-tertiary-6: #1e3a8a; // Azul oscuro (ajusta según tu paleta)

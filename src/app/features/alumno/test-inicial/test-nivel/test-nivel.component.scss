@@ -2,12 +2,22 @@
   // Evitamos que las fórmulas gigantes rompan el layout
   overflow-x: auto;
   overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
   padding: 0.5rem 0;
 
   // Ajuste sutil al tamaño de KaTeX para que no sea disruptivo
   ::ng-deep .katex-display {
     margin: 0.5em 0 !important;
-    font-size: 1.1em; // Un poco más grande que el texto base pero no gigante
+    font-size: 1.05em;
+  }
+
+  @media (max-width: 639px) {
+    ::ng-deep .katex {
+      font-size: 1em !important;
+    }
+    ::ng-deep .katex-display {
+      font-size: 0.95em !important;
+    }
   }
 }
 

@@ -10,10 +10,10 @@
           <span nz-icon nzType="check-circle" nzTheme="fill"></span>
         </div>
         <div class="space-y-1">
-          <h1 class="text-4xl font-black text-slate-900 tracking-tight">
+          <h1 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight px-1">
             ¡Diagnóstico Completado!
           </h1>
-          <p class="text-lg text-slate-500 font-medium">
+          <p class="text-base sm:text-lg text-slate-500 font-medium px-2">
             Hemos analizado tu forma de aprender y tus conocimientos previos.
           </p>
         </div>
@@ -24,28 +24,28 @@
           <nz-card
             class="rounded-[2.5rem] border-none shadow-2xl shadow-slate-200/50 overflow-hidden"
           >
-            <div class="p-8 space-y-8">
-              <div class="flex items-start justify-between">
-                <div class="space-y-1">
+            <div class="p-5 sm:p-8 space-y-6 sm:space-y-8">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="space-y-1 min-w-0">
                   <h3
                     class="text-xs font-black uppercase tracking-[0.2em] text-blue-600"
                   >
                     Perfil de Aprendizaje
                   </h3>
-                  <h2 class="text-3xl font-bold text-slate-800">
+                  <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 break-words">
                     {{ estiloPredominante()?.tipo | titlecase }}
                   </h2>
                 </div>
                 <nz-tag
                   [nzColor]="getStyleColor(estiloPredominante()?.tipo ?? '')"
-                  class="rounded-full px-4 py-1 font-bold border-none capitalize"
+                  class="rounded-full px-4 py-1 font-bold border-none capitalize self-start"
                 >
                   Predominante
                 </nz-tag>
               </div>
 
               <div
-                class="bg-slate-50 p-6 rounded-3xl border border-slate-100 italic text-slate-600 leading-relaxed text-lg"
+                class="bg-slate-50 p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-100 italic text-slate-600 leading-relaxed text-base sm:text-lg"
               >
                 "{{ descripcionEstilo() }}"
               </div>
@@ -148,7 +148,7 @@
           nzType="primary"
           (click)="finishProcess()"
           [nzLoading]="loading()"
-          class="h-16 px-16 text-xl font-black rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 border-none shadow-2xl shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all"
+          class="h-14 sm:h-16 w-full max-w-md px-8 sm:px-16 text-lg sm:text-xl font-black rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 border-none shadow-2xl shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all"
         >
           Comenzar mi Aprendizaje
           <span nz-icon nzType="arrow-right" class="ml-2"></span>

@@ -43,20 +43,20 @@
             class="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"
           ></div>
 
-          <div class="relative flex justify-between items-center mb-6">
-            <div class="space-y-1">
-              <h1 class="text-xl font-black tracking-tight">
+          <div class="relative flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-6">
+            <div class="space-y-1 min-w-0">
+              <h1 class="text-lg sm:text-xl font-black tracking-tight">
                 Validación de Conocimientos
               </h1>
               <div
-                class="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-wider"
+                class="flex flex-wrap items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-wider"
               >
-                <span nz-icon nzType="tag"></span> Tema ID:
-                {{ placementTest()?.topicName }}
+                <span nz-icon nzType="tag"></span>
+                <span class="break-words">{{ placementTest()?.topicName }}</span>
               </div>
             </div>
 
-            <div class="text-right">
+            <div class="text-left sm:text-right shrink-0">
               <div
                 class="text-2xl font-mono font-black text-blue-400 leading-none"
               >
@@ -91,9 +91,9 @@
         </div>
 
         <div
-          class="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden"
+          class="bg-white rounded-2xl sm:rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden"
         >
-          <div class="p-8 md:p-12 space-y-10">
+          <div class="p-5 sm:p-8 md:p-12 space-y-8 sm:space-y-10">
             <div class="space-y-6">
               <nz-tag
                 [nzColor]="
@@ -109,7 +109,7 @@
               </nz-tag>
 
               <div
-                class="math-container text-xl md:text-2xl text-slate-800 font-semibold leading-relaxed"
+                class="math-container text-lg sm:text-xl md:text-2xl text-slate-800 font-semibold leading-relaxed overflow-x-auto"
                 [katex]="currentQuestion()!.statement"
                 [displayMode]="true"
               ></div>
@@ -128,9 +128,9 @@
                       ? 'border-blue-600 bg-blue-50 ring-4 ring-blue-500/5'
                       : 'border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50'
                   "
-                  class="group relative flex items-center p-5 rounded-2xl border-2 cursor-pointer transition-all duration-200"
+                  class="group relative flex items-center p-4 sm:p-5 rounded-2xl border-2 cursor-pointer transition-all duration-200"
                 >
-                  <div class="flex items-center gap-5 w-full">
+                  <div class="flex items-center gap-3 sm:gap-5 w-full min-w-0">
                     <div
                       [class]="
                         alt.selected
@@ -142,7 +142,7 @@
                       {{ ["A", "B", "C", "D", "E"][i] }}
                     </div>
                     <div
-                      class="text-lg font-medium text-slate-700"
+                      class="text-base sm:text-lg font-medium text-slate-700 min-w-0 overflow-x-auto"
                       [katex]="alt.latexExpression"
                     ></div>
                   </div>
@@ -161,19 +161,19 @@
           </div>
 
           <div
-            class="bg-slate-50/80 p-6 md:px-12 flex items-center justify-between border-t border-slate-100"
+            class="bg-slate-50/80 p-4 sm:p-6 md:px-12 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-slate-100"
           >
             <button
               nz-button
               nzType="default"
               (click)="prevQuestion()"
               [disabled]="currentQuestionIndex() === 0"
-              class="h-12 px-8 rounded-xl font-bold flex items-center gap-2"
+              class="h-12 px-8 rounded-xl font-bold flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               <span nz-icon nzType="arrow-left"></span> Anterior
             </button>
 
-            <div class="flex gap-4">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
               @if (
                 currentQuestionIndex() <
                 (placementTest()?.questionTestResponses?.length || 0) - 1
@@ -183,7 +183,7 @@
                   nzType="primary"
                   (click)="nextQuestion()"
                   [disabled]="!canGoNext()"
-                  class="h-12 px-10 rounded-xl font-bold bg-slate-900 border-none flex items-center gap-2"
+                  class="h-12 px-10 rounded-xl font-bold bg-slate-900 border-none flex items-center justify-center gap-2 w-full sm:w-auto"
                 >
                   Siguiente <span nz-icon nzType="arrow-right"></span>
                 </button>
@@ -193,7 +193,7 @@
                   nzType="primary"
                   (click)="finishEvaluation()"
                   [nzLoading]="submitting()"
-                  class="h-12 px-10 rounded-xl font-bold bg-emerald-600 border-none shadow-lg shadow-emerald-200 flex items-center gap-2"
+                  class="h-12 px-10 rounded-xl font-bold bg-emerald-600 border-none shadow-lg shadow-emerald-200 flex items-center justify-center gap-2 w-full sm:w-auto"
                 >
                   Finalizar Evaluación <span nz-icon nzType="send"></span>
                 </button>

@@ -16,12 +16,12 @@ import { filter } from 'rxjs';
     NzIconModule,
   ],
   template: `
-    <div class="space-y-6 animate-in fade-in duration-500">
+    <div class="space-y-4 sm:space-y-6 animate-in fade-in duration-500">
       <div class="flex flex-col gap-1">
-        <h1 class="text-3xl font-black text-slate-900 tracking-tight">
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
           Análisis de Progreso
         </h1>
-        <p class="text-slate-500 font-medium italic">
+        <p class="text-sm sm:text-base text-slate-500 font-medium italic">
           Monitorea tu evolución y descubre tus próximas metas.
         </p>
       </div>
@@ -30,27 +30,28 @@ import { filter } from 'rxjs';
         [nzSelectedIndex]="currentTabIndex"
         (nzSelectedIndexChange)="handleTabChange($event)"
         nzType="card"
-        class="custom-nav-tabs"
+        class="custom-nav-tabs alumno-tabs-responsive"
       >
         <nz-tab [nzTitle]="titleGeneral"></nz-tab>
         <nz-tab [nzTitle]="titleGrafo"></nz-tab>
       </nz-tabset>
 
       <ng-template #titleGeneral>
-        <div class="flex items-center gap-2 px-4">
+        <div class="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 whitespace-nowrap">
           <span nz-icon nzType="dashboard"></span>
-          <span class="font-bold">Vista General</span>
+          <span class="font-bold text-sm sm:text-base">Vista General</span>
         </div>
       </ng-template>
 
       <ng-template #titleGrafo>
-        <div class="flex items-center gap-2 px-4">
+        <div class="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 whitespace-nowrap">
           <span nz-icon nzType="deployment-unit"></span>
-          <span class="font-bold">Mapa de Competencias</span>
+          <span class="font-bold text-sm sm:text-base">Mapa</span>
+          <span class="font-bold text-sm sm:text-base hidden sm:inline">de Competencias</span>
         </div>
       </ng-template>
 
-      <div class="bg-white/60 backdrop-blur-sm rounded-[2.5rem] border border-slate-100 p-6 min-h-[600px] shadow-xl shadow-blue-900/5 mt-4">
+      <div class="bg-white/60 backdrop-blur-sm rounded-2xl sm:rounded-[2.5rem] border border-slate-100 p-4 sm:p-6 min-h-[min(600px,70vh)] sm:min-h-[600px] shadow-xl shadow-blue-900/5 mt-2 sm:mt-4">
         <router-outlet></router-outlet>
       </div>
     </div>
@@ -79,6 +80,19 @@ import { filter } from 'rxjs';
         }
       }
       .ant-tabs-ink-bar { display: none !important; }
+
+      .alumno-tabs-responsive .ant-tabs-nav {
+        margin: 0 !important;
+      }
+      .alumno-tabs-responsive .ant-tabs-nav-wrap {
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch;
+      }
+      .alumno-tabs-responsive .ant-tabs-nav-list {
+        flex-wrap: nowrap !important;
+        min-width: min-content;
+      }
     }
   `]
 })

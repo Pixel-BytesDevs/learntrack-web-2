@@ -1,0 +1,17 @@
+.math-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  ::ng-deep .katex-display {
+    margin: 0.5em 0 !important;
+  }
+
+  @media (max-width: 639px) {
+    ::ng-deep .katex {
+      font-size: 1em !important;
+    }
+    ::ng-deep .katex-display {
+      font-size: 0.95em !important;
+    }
+  }
+}

@@ -3,9 +3,9 @@
 >
   <!-- Header de Navegación -->
   <div
-    class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-100 shadow-sm"
+    class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between bg-white p-4 rounded-2xl border border-slate-100 shadow-sm"
   >
-    <div class="flex items-center gap-4">
+    <div class="flex items-start sm:items-center gap-3 sm:gap-4 min-w-0 flex-1">
       <button
         nz-button
         nzType="text"
@@ -14,9 +14,9 @@
       >
         <span nz-icon nzType="arrow-left"></span> Volver
       </button>
-      <div class="h-6 w-[1px] bg-slate-200"></div>
-      <div>
-        <h1 class="text-lg font-black text-slate-800 leading-tight">
+      <div class="hidden sm:block h-6 w-[1px] bg-slate-200 shrink-0"></div>
+      <div class="min-w-0 flex-1">
+        <h1 class="text-base sm:text-lg font-black text-slate-800 leading-tight break-words">
           {{ recommendation()?.topicName }}
         </h1>
         <p
@@ -31,7 +31,7 @@
       nz-button
       nzType="primary"
       (click)="initEvaluation()"
-      class="bg-slate-900 border-none rounded-xl h-11 px-6 font-bold hover:scale-105 transition-all"
+      class="bg-slate-900 border-none rounded-xl h-11 px-6 font-bold hover:scale-105 transition-all w-full lg:w-auto shrink-0"
     >
       <span nz-icon nzType="form"></span> Iniciar Evaluación
     </button>
@@ -41,7 +41,7 @@
     <!-- LADO IZQUIERDO: VISOR PRINCIPAL -->
     <div class="lg:col-span-8 space-y-6">
       <div
-        class="bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl aspect-video relative group flex items-center justify-center"
+        class="bg-slate-900 rounded-2xl sm:rounded-[2.5rem] overflow-hidden shadow-2xl aspect-video min-h-[200px] relative group flex items-center justify-center"
       >
         <!-- CASE: VIDEO -->
         @if (resourceType() === TiposMaterial.VIDEO) {
@@ -182,7 +182,7 @@
       </div>
 
       <!-- Detalles del recurso -->
-      <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
+      <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-100 shadow-sm">
         <div class="flex flex-wrap items-center gap-3 mb-4">
           <nz-tag
             [nzColor]="'blue'"
@@ -200,7 +200,7 @@
             estimada</span
           > -->
         </div>
-        <h2 class="text-2xl font-bold text-slate-800 mb-4">
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-4 break-words">
           {{ selectedResource()?.title }}
         </h2>
         <p class="text-slate-600 leading-relaxed">

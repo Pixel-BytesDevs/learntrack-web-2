@@ -65,9 +65,9 @@
     @case (UiStates.ACTIVE) {
       <div class="space-y-6">
         <div
-          class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between gap-4"
+          class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
         >
-          <div class="flex-1 space-y-1">
+          <div class="flex-1 min-w-0 space-y-1">
             <div
               class="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400"
             >
@@ -84,7 +84,7 @@
           </div>
 
           <div
-            class="bg-slate-900 text-white px-4 py-2 rounded-xl flex items-center gap-2"
+            class="bg-slate-900 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-2 shrink-0 sm:self-auto w-full sm:w-auto"
           >
             <span nz-icon nzType="clock-circle" class="text-blue-400"></span>
             <span class="text-lg font-mono font-bold text-blue-50">20:00</span>
@@ -146,14 +146,14 @@
             </div>
 
             <div
-              class="bg-slate-50/50 p-4 md:px-8 flex items-center justify-between border-t border-slate-100"
+              class="bg-slate-50/50 p-4 md:px-8 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-slate-100"
             >
               <button
                 nz-button
                 nzType="default"
                 (click)="prev()"
                 [disabled]="currentIndex() === 0"
-                class="h-10 px-6 rounded-lg font-bold border-slate-200 text-slate-500"
+                class="h-10 px-6 rounded-lg font-bold border-slate-200 text-slate-500 inline-flex items-center justify-center w-full sm:w-auto"
               >
                 <span nz-icon nzType="arrow-left"></span>
                 Atrás
@@ -165,7 +165,7 @@
                   nzType="primary"
                   (click)="next()"
                   [disabled]="!selectedAnswers()[q.id]"
-                  class="h-10 px-8 rounded-lg font-bold bg-slate-800 border-none inline-flex items-center"
+                  class="h-10 px-8 rounded-lg font-bold bg-slate-800 border-none inline-flex items-center justify-center w-full sm:w-auto"
                 >
                   Siguiente
                   <span nz-icon nzType="arrow-right" class="ml-2"></span>
@@ -176,7 +176,7 @@
                   nzType="primary"
                   (click)="submit()"
                   [disabled]="progress() < 100"
-                  class="h-10 px-8 rounded-lg font-bold bg-blue-600 border-none shadow-md inline-flex items-center"
+                  class="h-10 px-8 rounded-lg font-bold bg-blue-600 border-none shadow-md inline-flex items-center justify-center w-full sm:w-auto"
                 >
                   Finalizar
                   <span nz-icon nzType="send" class="ml-2"></span>

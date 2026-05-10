@@ -120,8 +120,8 @@ import { AppStore } from '../../../state/app.store';
           </div>
         </nz-sider>
 
-        <nz-content class="flex-1 bg-slate-50/50 overflow-y-auto">
-          <div class="max-w-[1400px] mx-auto p-6 md:p-10">
+        <nz-content class="flex-1 bg-slate-50/50 overflow-y-auto overflow-x-hidden">
+          <div class="max-w-[1400px] mx-auto px-4 py-5 sm:px-6 sm:py-7 md:px-8 md:py-10 lg:px-10">
             <router-outlet></router-outlet>
           </div>
         </nz-content>
