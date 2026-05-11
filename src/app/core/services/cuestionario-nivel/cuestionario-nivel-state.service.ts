@@ -60,7 +60,7 @@ readonly results$ = this._results$.asObservable();
 				tap((test) => {
 					test!.startedAt = new Date().toISOString();
 					this._test$.next(test);
-					this._remainingSeconds.next(20 * 60); // ejemplo: 20 minutos
+					this._remainingSeconds.next(40 * 60); // ejemplo: 40 minutos
 					this._uiState.next(UiState.ACTIVE);
 					this.saveState();
 				}),

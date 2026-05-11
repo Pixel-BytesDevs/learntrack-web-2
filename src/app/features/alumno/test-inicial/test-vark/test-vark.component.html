@@ -61,7 +61,7 @@
         <div class="grid gap-4">
 
           @for (
-            alt of (q.alternativas ?? []);
+            alt of (q.alternativas);
             track alt.alternativaId
           ) {
 
@@ -70,12 +70,12 @@
 
               [ngClass]="{
                 'border-blue-500 bg-blue-50/50 shadow-md ring-4 ring-blue-500/5':
-                  (selectedAnswers()[q.preguntaId] ?? []).includes(
+                  (selectedAnswers()[q.preguntaId]).includes(
                     alt.alternativaId
                   ),
 
                 'border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50':
-                  !(selectedAnswers()[q.preguntaId] ?? []).includes(
+                  !(selectedAnswers()[q.preguntaId]).includes(
                     alt.alternativaId
                   ),
               }"
@@ -90,19 +90,19 @@
 
                   [ngClass]="{
                     'bg-blue-600 border-blue-600 shadow-sm':
-                      (selectedAnswers()[q.preguntaId] ?? []).includes(
+                      (selectedAnswers()[q.preguntaId]).includes(
                         alt.alternativaId
                       ),
 
                     'bg-white border-slate-300':
-                      !(selectedAnswers()[q.preguntaId] ?? []).includes(
+                      !(selectedAnswers()[q.preguntaId]).includes(
                         alt.alternativaId
                       ),
                   }"
                 >
 
                   @if (
-                    (selectedAnswers()[q.preguntaId] ?? []).includes(
+                    (selectedAnswers()[q.preguntaId]).includes(
                       alt.alternativaId
                     )
                   ) {
