@@ -35,6 +35,7 @@
   </div>
 
   @if (currentQuestion(); as q) {
+    @let selected = selectionsFor(q.preguntaId);
 
     <div
       class="bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl shadow-slate-200/60 overflow-hidden"
@@ -70,14 +71,10 @@
 
               [ngClass]="{
                 'border-blue-500 bg-blue-50/50 shadow-md ring-4 ring-blue-500/5':
-                  (selectedAnswers()[q.preguntaId]).includes(
-                    alt.alternativaId
-                  ),
+                  selected.includes(alt.alternativaId),
 
                 'border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50':
-                  !(selectedAnswers()[q.preguntaId]).includes(
-                    alt.alternativaId
-                  ),
+                  !selected.includes(alt.alternativaId),
               }"
 
               (click)="toggleOption(q.preguntaId, alt.alternativaId)"
@@ -90,22 +87,14 @@
 
                   [ngClass]="{
                     'bg-blue-600 border-blue-600 shadow-sm':
-                      (selectedAnswers()[q.preguntaId]).includes(
-                        alt.alternativaId
-                      ),
+                      selected.includes(alt.alternativaId),
 
                     'bg-white border-slate-300':
-                      !(selectedAnswers()[q.preguntaId]).includes(
-                        alt.alternativaId
-                      ),
+                      !selected.includes(alt.alternativaId),
                   }"
                 >
 
-                  @if (
-                    (selectedAnswers()[q.preguntaId]).includes(
-                      alt.alternativaId
-                    )
-                  ) {
+                  @if (selected.includes(alt.alternativaId)) {
 
                     <span
                       nz-icon
@@ -175,9 +164,7 @@
               nzType="primary"
               (click)="next()"
 
-              [disabled]="
-                (selectedAnswers()[q.preguntaId]?.length ?? 0) === 0
-              "
+              [disabled]="selected.length === 0"
 
               class="h-12 px-8 rounded-xl font-bold bg-slate-800 hover:bg-slate-900 border-none flex-1 sm:flex-initial"
             >

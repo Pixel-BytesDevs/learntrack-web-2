@@ -41,16 +41,21 @@ import { GrafoEstudianteService } from '../../../../core/services/grafo/grafo-es
           Estado de Competencias
         </p>
         <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-[#10b981]"></span> Excelente
-          (Dominio 3)
+          <span
+            class="w-10 h-3 rounded-full bg-gradient-to-r from-[#f59e0b] to-[#10b981]"
+          ></span>
+          Dominio 0–100 (color continuo)
         </div>
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-[#3b82f6]"></span> Bueno (Dominio
-          2)
+        <div class="flex items-center gap-2 text-slate-500">
+          <span class="w-3 h-3 rounded-full bg-[#f59e0b]"></span> Bajo (cerca de
+          0)
         </div>
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-[#f59e0b]"></span> Bajo (Dominio
-          1)
+        <div class="flex items-center gap-2 text-slate-500">
+          <span class="w-3 h-3 rounded-full bg-[#eab308]"></span> Intermedio
+        </div>
+        <div class="flex items-center gap-2 text-slate-500">
+          <span class="w-3 h-3 rounded-full bg-[#10b981]"></span> Alto (cerca de
+          100)
         </div>
         <div class="flex items-center gap-2">
           <span class="w-3 h-3 rounded-full bg-slate-300"></span> Bloqueado /
@@ -108,22 +113,20 @@ export class VistaGrafoComponent implements OnInit, AfterViewInit {
       const idStr = n.id.toString();
       if (processedNodes.has(idStr)) return;
 
-      const status = !n.isActive
-        ? 'blocked'
-        : n.dominio === 1
-          ? 'low'
-          : n.dominio === 2
-            ? 'good'
-            : n.dominio === 3
-              ? 'excellent'
-              : 'neutral';
+      const dominioRaw = Number(n.dominio);
+      const dominioPct = Math.min(
+        100,
+        Math.max(0, Number.isFinite(dominioRaw) ? dominioRaw : 0),
+      );
+      const status = !n.isActive ? 'blocked' : 'active';
 
       nodesList.push({
         group: 'nodes', // Esto le indica a TS que es un NodeDefinition
         data: {
           id: idStr,
           label: n.label,
-          status: status,
+          status,
+          dominio: dominioPct,
         },
       });
       processedNodes.add(idStr);
@@ -176,25 +179,22 @@ export class VistaGrafoComponent implements OnInit, AfterViewInit {
           },
         },
         {
-          selector: 'node[status="excellent"]',
-          style: { 'background-color': '#10b981', 'border-color': '#d1fae5' },
+          selector: 'node[status="active"]',
+          style: {
+            // dominio 0–100: mapData solo interpola entre dos colores (RGB)
+            'background-color':
+              'mapData(dominio, 0, 100, #f59e0b, #10b981)',
+            'border-color': 'mapData(dominio, 0, 100, #fef3c7, #d1fae5)',
+          },
         },
         {
-          selector: 'node[status="good"]',
-          style: { 'background-color': '#3b82f6', 'border-color': '#dbeafe' },
-        },
-        {
-          selector: 'node[status="low"]',
-          style: { 'background-color': '#f59e0b', 'border-color': '#fef3c7' },
-        },
-        { 
-          selector: 'node[status="blocked"]', 
-          style: { 
-            'background-color': '#e2e8f0', 
-            'color': '#94a3b8',
+          selector: 'node[status="blocked"]',
+          style: {
+            'background-color': '#e2e8f0',
+            color: '#94a3b8',
             'border-color': '#f1f5f9',
-            'opacity': 0.8
-          } 
+            opacity: 0.8,
+          },
         },
         {
           selector: 'edge',

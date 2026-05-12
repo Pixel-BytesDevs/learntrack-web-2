@@ -5,7 +5,6 @@ import {
   signal,
   computed,
   effect,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -59,9 +58,6 @@ export class TestVarkComponent implements OnInit {
   private tokenService = inject(TokenService);
   private router = inject(Router);
   private message = inject(NzMessageService);
-
-  // 👇 IMPORTANTE
-  private cdr = inject(ChangeDetectorRef);
 
   readonly store = inject(AppStore);
 
@@ -147,11 +143,6 @@ export class TestVarkComponent implements OnInit {
 
         // 👇 NUEVA REFERENCIA
         this.questions.set([...normalizedData]);
-
-        // 👇 FORZAR RENDER EN PRODUCCIÓN
-        queueMicrotask(() => {
-          this.cdr.detectChanges();
-        });
       },
 
       error: (err) => {
@@ -179,6 +170,15 @@ export class TestVarkComponent implements OnInit {
     if (cache) {
       this.selectedAnswers.set(cache);
     }
+  }
+
+  // =========================
+  // HELPERS (template-safe)
+  // =========================
+
+  /** Evita `.includes` sobre `undefined` cuando aún no hay selección para la pregunta. */
+  selectionsFor(preguntaId: number): number[] {
+    return this.selectedAnswers()[preguntaId] ?? [];
   }
 
   // =========================
@@ -210,9 +210,6 @@ export class TestVarkComponent implements OnInit {
     this.selectedAnswers.set({
       ...current,
     });
-
-    // 👇 fuerza render
-    this.cdr.detectChanges();
   }
 
   // =========================
